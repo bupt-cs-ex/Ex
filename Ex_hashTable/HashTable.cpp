@@ -3,3 +3,6 @@
 //
 
 #include "HashTable.h"
+void HashTable::put(char *key) {
+
+}
