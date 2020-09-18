@@ -6,7 +6,15 @@
 
 #IncludeRegexTransform: 
 
+/Users/wangshangrong/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
+string.h
+-
+
 /Users/wangshangrong/Desktop/cs/CS_Experiment/Ex_hashTable/hashtable_search .cpp
 iostream
 -
+stdlib.h
+-
+HashTable.h
+/Users/wangshangrong/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
 

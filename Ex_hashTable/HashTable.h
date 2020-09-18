@@ -4,7 +4,7 @@
 
 #ifndef EX_HASHTABLE_HASHTABLE_H
 #define EX_HASHTABLE_HASHTABLE_H
-
+#include <string.h>
 class Node{
 public:
     Node(){
@@ -18,21 +18,22 @@ public:
 };
 class HashTable {
 public:
-    HashTable(unsigned long n, unsigned int(*hash_func)(const void* key)){
+    HashTable(unsigned long n, unsigned int(*hash_func)(char* key)){
         size = n;
         sizemask = n - 1;
-        table = new Node[n];
+        table = new Node*[n];
         hashFunction = hash_func;
     }
     void put(char* key);
+    bool find(char* key);
     ~HashTable(){
         delete []table;
     }
 private:
     unsigned long size;                                 //哈希表大小
     unsigned long sizemask;                             //哈希表大小掩码，用于计算索引值 size - 1
-    Node* table;
-    unsigned int (*hashFunction)(const void* key);      //哈希函数
+    Node** table;
+    unsigned int (*hashFunction)(char* key);      //哈希函数
 };
 
 
