@@ -25,3 +25,9 @@ bool HashTable::find(char* key) {
     }
     return false;
 }
+
+void HashTable::freeNode(Node *pNode) {
+    if(pNode->pNext != nullptr)
+        freeNode(pNode->pNext);
+    delete pNode;
+}

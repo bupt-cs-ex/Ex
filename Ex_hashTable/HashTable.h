@@ -18,7 +18,7 @@ public:
 };
 class HashTable {
 public:
-    HashTable(unsigned long n, unsigned int(*hash_func)(char* key)){
+    HashTable(unsigned int n, unsigned int(*hash_func)(char* key)){
         size = n;
         sizemask = n - 1;
         table = new Node*[n];
@@ -27,13 +27,20 @@ public:
     void put(char* key);
     bool find(char* key);
     ~HashTable(){
+        for(unsigned i = 0; i < size; i++){
+            if(table[i] != nullptr){
+                freeNode(table[i]);
+                table[i] = nullptr;
+            }
+        }
         delete []table;
     }
 private:
-    unsigned long size;                                 //哈希表大小
-    unsigned long sizemask;                             //哈希表大小掩码，用于计算索引值 size - 1
+    unsigned int size;                          //哈希表大小
+    unsigned int sizemask;                      //哈希表大小掩码，用于计算索引值 size - 1
     Node** table;
-    unsigned int (*hashFunction)(char* key);      //哈希函数
+    unsigned int (*hashFunction)(char* key);    //哈希函数
+    void freeNode(Node* pNode);                 //释放节点空间
 };
 
 

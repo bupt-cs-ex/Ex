@@ -16,7 +16,8 @@ unsigned int SDBMHash(char *str)
 }
 
 int main() {
-    int n = 128;
+    int n = pow(2, 16);
+
     FILE *infile = fopen("../dict.txt", "rb");
     if(infile == NULL)
     {
