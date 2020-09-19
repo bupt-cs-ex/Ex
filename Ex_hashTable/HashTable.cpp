@@ -5,7 +5,7 @@
 #include "HashTable.h"
 void HashTable::put(char* key) {
     unsigned int hash = hashFunction(key);
-    unsigned long index = hash & sizemask;
+    unsigned int index = hash & sizemask;
     Node* node = new Node();
     node->pVal = key;
     node->pNext = table[index];
@@ -14,7 +14,7 @@ void HashTable::put(char* key) {
 
 bool HashTable::find(char* key) {
     unsigned int hash = hashFunction(key);
-    unsigned long index = hash & sizemask;
+    unsigned int index = hash & sizemask;
     if(table[index] == nullptr)
         return false;
     Node* p = table[index];
