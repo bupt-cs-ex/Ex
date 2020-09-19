@@ -17,18 +17,28 @@ unsigned int SDBMHash(char *str)
 
 int main() {
     int n = 128;
-    HashTable hs = HashTable(n, SDBMHash);
-    FILE *infile = fopen("dict.txt", "rb");
-    int buff_len = 128;
-    unsigned char buff[buff_len];
-    if(infile == nullptr){
-        cout <<"打开dict.txt失败" << endl;
+    FILE *infile = fopen("../dict.txt", "rb");
+    if(infile == NULL)
+    {
+        printf("Failed open dict.txt\n");
         return -1;
     }
-    int rc = 0;
-    while((rc = fread(buff, sizeof(unsigned char), 1024, infile)) != 0){
-        cout<<buff<<endl;
+
+    while(!feof(infile))
+    {
+        char buff[128];
+        char ch = fgetc(infile);
+        int idx = 0;
+        while(ch != 0x0A)
+        {
+            buff[idx] = ch;
+            ++idx;
+            ch = fgetc(infile);
+        }
+        buff[idx] = '\0';
+        printf("%s\n", buff);
     }
+
     fclose(infile);
     return 0;
 }
