@@ -3,7 +3,7 @@
 //
 
 #include "HashTable.h"
-void HashTable::put(char *key) {
+void HashTable::put(char* key) {
     unsigned int hash = hashFunction(key);
     unsigned long index = hash & sizemask;
     Node* node = new Node();
@@ -12,7 +12,7 @@ void HashTable::put(char *key) {
     table[index] = node;
 }
 
-bool HashTable::find(char *key) {
+bool HashTable::find(char* key) {
     unsigned int hash = hashFunction(key);
     unsigned long index = hash & sizemask;
     if(table[index] == nullptr)
