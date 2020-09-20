@@ -42,7 +42,7 @@ int main() {
         tb.put(buff);
     }
     fclose(infile);
-    printf("Finished read dict.txt");
+    printf("Finished read dict.txt\n");
 
     infile = fopen("../string.txt", "rb");
     FILE *outfile = fopen("../result.txt", "wb");
@@ -69,7 +69,6 @@ int main() {
             fputs(buff, outfile);
             fputs("\n", outfile);
             count ++;
-            //printf("find key£º %s\n", buff);
         }
     }
     fclose(outfile);

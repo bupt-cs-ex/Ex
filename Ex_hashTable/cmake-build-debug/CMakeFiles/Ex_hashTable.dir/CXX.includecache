@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
+C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/HashTable.h
 string.h
 -
 
-C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/hashtable_search .cpp
+C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/hashtable_search .cpp
 iostream
 -
 cstdlib
@@ -20,5 +20,5 @@ cstdio
 math.h
 -
 HashTable.h
-C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
+C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/HashTable.h
 

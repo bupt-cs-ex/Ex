@@ -8,18 +8,18 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug"/>
+				<Option working_dir="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Ex_hashTable">
-				<Option output="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Ex_hashTable.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug"/>
+				<Option output="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Ex_hashTable.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -34,15 +34,15 @@
 					<Add directory="C:\MinGW\MinGW\include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 Ex_hashTable"/>
-					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 Ex_hashTable"/>
+					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="Ex_hashTable/fast">
-				<Option output="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Ex_hashTable.exe" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug"/>
+				<Option output="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Ex_hashTable.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -57,43 +57,43 @@
 					<Add directory="C:\MinGW\MinGW\include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 Ex_hashTable/fast"/>
-					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 Ex_hashTable/fast"/>
+					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug"/>
+				<Option working_dir="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug"/>
+				<Option working_dir="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/MinGW/MinGW/bin/mingw32-make.exe -f &quot;C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.cpp">
+		<Unit filename="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/HashTable.cpp">
 			<Option target="Ex_hashTable"/>
 		</Unit>
-		<Unit filename="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h">
+		<Unit filename="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/HashTable.h">
 			<Option target="Ex_hashTable"/>
 		</Unit>
-		<Unit filename="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/hashtable_search .cpp">
+		<Unit filename="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/hashtable_search .cpp">
 			<Option target="Ex_hashTable"/>
 		</Unit>
-		<Unit filename="C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/CMakeLists.txt">
+		<Unit filename="C:/Users/93736/Desktop/cs/Ex/Ex_hashTable/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>
