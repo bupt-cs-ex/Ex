@@ -6,15 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/Users/wangshangrong/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
+C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
 string.h
 -
 
-/Users/wangshangrong/Desktop/cs/CS_Experiment/Ex_hashTable/hashtable_search .cpp
+C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/hashtable_search .cpp
 iostream
 -
-stdlib.h
+cstdlib
+-
+cstdio
+-
+math.h
 -
 HashTable.h
-/Users/wangshangrong/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
+C:/Users/93736/Desktop/cs/CS_Experiment/Ex_hashTable/HashTable.h
 

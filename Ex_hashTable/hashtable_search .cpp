@@ -1,5 +1,7 @@
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
+#include <math.h>
 #include "HashTable.h"
 using namespace std;
 unsigned int SDBMHash(char *str)
@@ -19,7 +21,7 @@ int main() {
     int n = pow(2, 16);
 
     FILE *infile = fopen("../dict.txt", "rb");
-    if(infile == NULL)
+    if(infile == nullptr)
     {
         printf("Failed open dict.txt\n");
         return -1;
