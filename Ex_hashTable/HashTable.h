@@ -22,6 +22,7 @@ public:
         size = n;
         sizemask = n - 1;
         table = new Node*[n];
+        memset(table, 0, size);
         hashFunction = hash_func;
     }
     void put(char* key);

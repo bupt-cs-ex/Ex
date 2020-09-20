@@ -7,7 +7,9 @@ void HashTable::put(char* key) {
     unsigned int hash = hashFunction(key);
     unsigned int index = hash & sizemask;
     Node* node = new Node();
-    node->pVal = key;
+    node->len = strlen(key);
+    node->pVal = new char[node->len];
+    strcpy(node->pVal, key);
     node->pNext = table[index];
     table[index] = node;
 }
