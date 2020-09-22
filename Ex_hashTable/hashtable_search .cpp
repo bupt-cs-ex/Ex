@@ -75,6 +75,6 @@ int main() {
     printf("Finished read string.txt\n");
     fclose(outfile);
     fclose(infile);
-    printf("find %d keys, use %ld ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
+    printf("find %d keys, use %lu ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
     return 0;
 }
