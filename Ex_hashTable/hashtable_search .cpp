@@ -58,8 +58,7 @@ int main() {
         char buff[128];
         int ch = fgetc(infile);
         int idx = 0;
-        while(ch != 0x0A && ch != -1)
-        {
+        while(ch != 0x0A && ch != -1){
             buff[idx] = ch;
             ++idx;
             ch = fgetc(infile);
@@ -73,6 +72,6 @@ int main() {
     }
     fclose(outfile);
     fclose(infile);
-    printf("find %d keys\n",count);
+    printf("find %d keys\n", count);
     return 0;
 }
