@@ -13,7 +13,10 @@ void HashTable::put(char* key) {
     node->pNext = table[index];
     table[index] = node;
 }
-
+/**
+ * @param key : 待查找字符串
+ * @return : 查找结果
+ */
 bool HashTable::find(char* key) {
     unsigned int hash = hashFunction(key);
     unsigned int index = hash & sizemask;
