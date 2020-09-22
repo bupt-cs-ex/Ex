@@ -1,9 +1,8 @@
-#include <iostream>
-#include <cstdlib>
 #include <cstdio>
 #include <math.h>
 #include "HashTable.h"
 using namespace std;
+
 unsigned int SDBMHash(char *str)
 {
     unsigned int hash = 0;
@@ -46,11 +45,11 @@ int main() {
 
     infile = fopen("../string.txt", "rb");
     FILE *outfile = fopen("../result.txt", "wb");
-    if(infile == NULL){
+    if(infile == nullptr){
         printf("Failed open string.txt\n");
         return -1;
     }
-    if(outfile == NULL){
+    if(outfile == nullptr){
         printf("Failed open result.txt\n");
         return -1;
     }
@@ -70,6 +69,7 @@ int main() {
             count ++;
         }
     }
+    printf("Finished read string.txt\n");
     fclose(outfile);
     fclose(infile);
     printf("find %d keys\n", count);
