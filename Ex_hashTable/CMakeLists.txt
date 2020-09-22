@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.17)
 project(Ex_hashTable)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Ex_hashTable "hashtable_search .cpp" HashTable.cpp HashTable.h)
+include_directories(.)
+
+add_executable(Ex_hashTable
+        dict.txt
+        HashTable.cpp
+        HashTable.h
+        "hashtable_search .cpp"
+        result.txt
+        string.txt)

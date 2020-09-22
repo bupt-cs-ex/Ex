@@ -25,9 +25,9 @@
   /**
    * 节点结构
    */
-  class Node{
+  class Node {
   public:
-      Node(){
+      Node() {
           pVal = nullptr;
           len = 0;
           pNext = nullptr;
@@ -46,7 +46,7 @@
        * @param n : 哈希表表长（桶数）
        * @param hash_func : 采用的hash函数
        */
-      HashTable(unsigned int n, unsigned int(*hash_func)(char* key)){
+      HashTable(unsigned int n, unsigned int(*hash_func)(char* key)) {
           size = n;
           sizemask = n - 1;
           table = new Node*[n];
@@ -56,8 +56,8 @@
       void put(char* key);
       bool find(char* key);
       ~HashTable(){
-          for(unsigned i = 0; i < size; i++){
-              if(table[i] != nullptr){
+          for(unsigned i = 0; i < size; i++) {
+              if(table[i] != nullptr) {
                   freeNode(table[i]);
                   table[i] = nullptr;
               }
@@ -90,8 +90,6 @@
       table[index] = node;
   }
   ```
-
-  
 
 - 查找
 
@@ -171,27 +169,35 @@ fclose(infile);
 
 2. 创建`HasbTable`对象
 
-3. 读取`dict.txt`并将每个单词插入到`HashTable`对象中
+3. 读取`dict.txt`并将每个 keyword 插入到`HashTable`对象中
 
-4. 读取`string.txt`中的单词并在`HashTable`中查找，将查找到的单词写入`result.txt`中
+4. 读取`string.txt`中的 keyword 并在`HashTable`中查找，将查找到的单词写入`result.txt`中
 
 
 
 ## 4、遇到的问题
 
-1、文件读取失败
+问题1：文件读取失败
 
 解决：因为 clion 会把编译相关的文件放在 cmake-build-debug 文件夹，所以在设置文件的相对路径时应设置为上级目录，即 `../` ，否则文件读取失败。
 
 
 
-
-
 ## 5、结果指标
 
+### 5.1 结果
 
+查找到 6306 个 keywords，查到的各个 keyword 详见 result.txt 。
+
+
+
+### 5.2 运行时间
+
+627 ms
 
 
 
 ## 6、结论和总结
+
+哈希表通过将关键码值映射到表中一个位置来访问记录，以加快查找速度。选择合适的哈希函数和哈希表表长，以寻求冲突和查找速度的平衡。本实验测试了 2\^15，2\^16，2\^17，2\^18，2\^19 等不同表长，发现取表长 2^17 时，查找速度最快。
 
