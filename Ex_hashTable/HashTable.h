@@ -8,9 +8,9 @@
 /**
  * 节点结构
  */
-class Node{
+class Node {
 public:
-    Node(){
+    Node() {
         pVal = nullptr;
         len = 0;
         pNext = nullptr;
@@ -29,7 +29,7 @@ public:
      * @param n : 哈希表表长（桶数）
      * @param hash_func : 采用的hash函数
      */
-    HashTable(unsigned int n, unsigned int(*hash_func)(char* key)){
+    HashTable(unsigned int n, unsigned int(*hash_func)(char* key)) {
         size = n;
         sizemask = n - 1;
         table = new Node*[n];
@@ -38,9 +38,9 @@ public:
     }
     void put(char* key);
     bool find(char* key);
-    ~HashTable(){
-        for(unsigned i = 0; i < size; i++){
-            if(table[i] != nullptr){
+    ~HashTable() {
+        for(unsigned i = 0; i < size; i++) {
+            if(table[i] != nullptr) {
                 freeNode(table[i]);
                 table[i] = nullptr;
             }
