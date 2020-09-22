@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <math.h>
 #include "HashTable.h"
+#include <time.h>
 using namespace std;
 
 unsigned int SDBMHash(char *str)
@@ -16,6 +17,7 @@ unsigned int SDBMHash(char *str)
 }
 
 int main() {
+    clock_t start_time = clock();
     int n = pow(2, 17);
     unsigned int count = 0;
     HashTable tb = HashTable(n, SDBMHash);
@@ -69,9 +71,10 @@ int main() {
             count ++;
         }
     }
+    clock_t end_time = clock();
     printf("Finished read string.txt\n");
     fclose(outfile);
     fclose(infile);
-    printf("find %d keys\n", count);
+    printf("find %d keys, use %ld ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
     return 0;
 }
