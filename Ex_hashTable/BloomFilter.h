@@ -6,14 +6,16 @@
 #define EX_HASHTABLE_BLOOMFILTER_H
 #include <string.h>
 #include <time.h>
+#include <cmath>
 #include <cstdlib>
+#include <iostream>
 #include "MurmurHash3.h"
 /**
  * ²¼Â¡¹ýÂË
  */
 class BloomFilter {
 public:
-    BloomFilter(unsigned m, double e, int k);
+    BloomFilter(unsigned n, double e);
     void put(char* key);
     bool find(char* key);
     ~BloomFilter(){
@@ -22,7 +24,6 @@ public:
 private:
     int* get_bit_posList(char* key);
     unsigned int bit_size;
-    double error_rate;
     int hash_num;
     unsigned char *bit_array;
 };

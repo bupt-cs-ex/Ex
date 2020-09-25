@@ -3,12 +3,18 @@
 //
 
 #include "BloomFilter.h"
-BloomFilter::BloomFilter(unsigned int m, double e, int k) {
-    bit_size = m - (m % 8);                         //保证m为8的整数倍
-    error_rate = e;
-    hash_num = k;                                   // 需要的哈希函数数量
-    bit_array = new unsigned char[bit_size/8];      // sizeof(char) = 8 bit
-    memset(bit_array, 0b00000000, bit_size/8);       //  init 0
+/**
+ * 构造函数
+ * @param n 集合中字符串个数
+ * @param e 允许的最大错误率
+ */
+BloomFilter::BloomFilter(unsigned int n, double e) {
+    unsigned m = -1.44 * n * (log(e) / log(2));  //计算合适的bit size
+    bit_size = m - (m % 8);                                //保证m为8的整数倍
+    hash_num = int(0.7 * m / n);                           // 需要的哈希函数数量
+    bit_array = new unsigned char[bit_size/8];             // sizeof(char) = 8 bit
+    std::cout<< "m:" << bit_size << " k:" << hash_num << std::endl;
+    memset(bit_array, 0b00000000, bit_size/8);      //  init 0
 }
 /**
  *
@@ -46,7 +52,7 @@ bool BloomFilter::find(char *key) {
         int bit_pos = pos_list[i] % 8;
         unsigned char val = 0b10000000;
         val = val >> bit_pos;
-        if((bit_array[pos] & val) == 0b00000000)
+        if(int(bit_array[pos] & val) == 0)
             return false;
     }
     return true;
