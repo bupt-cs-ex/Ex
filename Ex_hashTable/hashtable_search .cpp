@@ -88,9 +88,10 @@ int hash_table_search_main(){
     return 0;
 }
 int bloom_filter_main(){
+    srand(time(0));
     clock_t start_time = clock();
     unsigned int count = 0;
-    BloomFilter bf(480000, 0.0001, 13);
+    BloomFilter bf(960000, 0.0001, 13);
 
 
     //读取 dict.txt 的 keywords，插入到哈希表

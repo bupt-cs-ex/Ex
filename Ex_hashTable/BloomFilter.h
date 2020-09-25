@@ -16,6 +16,9 @@ public:
     BloomFilter(unsigned m, double e, int k);
     void put(char* key);
     bool find(char* key);
+    ~BloomFilter(){
+        delete[] bit_array;
+    }
 private:
     int* get_bit_posList(char* key);
     unsigned int bit_size;
