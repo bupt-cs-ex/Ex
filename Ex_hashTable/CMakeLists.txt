@@ -11,4 +11,6 @@ add_executable(Ex_hashTable
         HashTable.h
         "hashtable_search .cpp"
         result.txt
-        string.txt)
+        string.txt BloomFilter.cpp BloomFilter.h
+        MurmurHash3.h
+        MurmurHash3.cpp)
