@@ -25,7 +25,7 @@ BplusTree::BplusTree(int m) {
 }
 
 void BplusTree::Insert(int key) {
-    Recursive_Insert(root, key, 0, nullptr);
+    root = Recursive_Insert(root, key, 0, nullptr);
 }
 /**
  * 递归插入key
@@ -76,17 +76,54 @@ TreeNode* BplusTree::Recursive_Insert(TreeNode* T, int key, int i, TreeNode* par
     return T;
 }
 /**
- * 对节点插入一个元素：对父节点插入T节点或者对T节点插入key值
+ * 对节点插入一个元素（key 或 node）：
+ *                  对父节点插入T节点
+ *                  对T节点插入key值
  * @param isKey     插入的是值还是节点
  * @param parent    T节点的父节点
  * @param T         插入的节点
  * @param key       插入的值
- * @param i         对T节点插入值key时，i为T在parentd的位置,j为key要插入的位置
+ * @param i         对T节点插入值key时，i为T在parent的位置,j为key要插入的位置
  * @param j         对parent节点插入T节点时，i为待插入的位置。j、key无用
- * @return
+ * @return          返回插入的节点或插入key的节点
  */
 TreeNode *BplusTree::InsertElement(bool isKey, TreeNode* parent, TreeNode* T, int key, int i, int j) {
-    return nullptr;
+    int k;
+    if(isKey){
+        //  将key插入到T节点移除
+        k = T->keyNums - 1;
+        //一趟插入排序
+        while(k >= j){
+            T->Keys[k + 1] = T->Keys[k];
+            k-- ;
+        }
+        T->Keys[j] = key;
+        if(parent){
+            //必要时更新父节点key
+            parent->Keys[i] = T->Keys[0];
+        }
+        T->keyNums++;
+    } else{
+        // 将节点T插入到parent中
+        if(T->child[0] == nullptr){
+            // 若T为叶子节点， 则需要重新连接叶子节点
+            if(i > 0)
+                parent->child[i - 1]->next = T;
+            T->next = parent->child[i];
+        }
+        k = parent->keyNums - 1;
+        while (k >= j){
+            // 需要同时更新孩子节点和key列表
+            parent->child[k + 1] = parent->child[k];
+            parent->Keys[k + 1] = parent->Keys[k];
+            k--;
+        }
+        parent->child[i] = T;
+        parent->Keys[i] = T->Keys[0];
+        parent->keyNums++;
+    }
+
+    return T;
 }
 /**
  * 分裂节点
@@ -156,5 +193,147 @@ TreeNode *BplusTree::FindSibling(TreeNode *parent, int i) {
  * @return          父节点
  */
 TreeNode *BplusTree::MoveElement(TreeNode *Src, TreeNode *Dst, TreeNode *parent, int i, int n) {
-    return nullptr;
+    int tempKey;
+    TreeNode* child;
+    int j = 0;
+    bool isSrcFirst = false;        //是否Src节点在前面
+    if(Src->Keys[0] < Dst->Keys[0])
+        isSrcFirst = true;
+
+    if(isSrcFirst){
+        // 节点Src 在 Dst前
+        if(Src->child[0]){
+            //Src 为索引节点
+            while(j < n){
+                child = Src->child[Src->keyNums - 1];
+                RemoveElement(false, Src, child, Src->keyNums - 1, 0);
+                // 由于Src 在 Dst前面， 因此Src的子节点移动到Dst时需要插入到最前面，即 i = 0
+                InsertElement(false, Dst, child, 0, 0, 0);
+                j++;
+            }
+        }else{
+            //Src 为叶子节点
+            while(j < n){
+                tempKey = Src->Keys[Src->keyNums - 1];
+                RemoveElement(true, parent, Src, i, Src->keyNums - 1);
+                // Src 在 parent中的位置是i Dst 在 parent中的位置是 i + 1
+                InsertElement(true, parent, Dst, tempKey, i + 1, 0);
+                j++;
+            }
+        }
+        //更新父节点的Keys
+        parent->Keys[i + 1] = Dst->Keys[0];
+        //更新Src 和 Dst下的叶子节点的连接
+        if(Src->keyNums > 0)
+            FindMostLeft(Src)->next = FindMostRight(Dst);
+
+    }else{
+        // 节点Src 在 Dst 后
+        if(Src->child[0]){
+            //Src 为索引节点
+            while(j < n){
+                child = Src->child[0];
+                RemoveElement(false, Src, child, 0, 0);
+                // Src 在 Dst后面，因此需要将Src的最左边的孩子移动到Dst最右边，即 i = Dst->keyNums
+                InsertElement(false, Dst, child, 0, Dst->keyNums, 0);
+                j++;
+            }
+        }else{
+            // Src 为叶子节点
+            while (j < n){
+                tempKey = Src->Keys[0];
+                RemoveElement(true, parent, Src, i, 0);
+                InsertElement(true, parent, Dst, tempKey, i - 1, Dst->keyNums);
+                j++;
+            }
+        }
+        // 更新父节点i的值
+        parent->Keys[i] = Src->Keys[0];
+        //更新Src 和 Dst下的叶子节点的连接
+        if(Src->keyNums > 0)
+            FindMostRight(Dst)->next = FindMostLeft(Src);
+
+    }
+    return parent;
+}
+/**
+ * 移除节点中的一个元素（key 或 node）:
+ *                  移除parent下的T节点
+ *                  移除T节点中的key
+ * @param isKey     移除的是否为key
+ * @param parent    节点T的父节点
+ * @param T         节点T
+ * @param i         节点T在父节点中的位置
+ * @param j         key在节点T中的位置
+ * @return          移除key后的节点或移除的节点
+ */
+TreeNode *BplusTree::RemoveElement(bool isKey, TreeNode *parent, TreeNode *T, int i, int j) {
+    int k, Limit;
+    if(isKey){
+        // 从节点T移除key, key在T的j位置
+        Limit = T->keyNums;
+        k = j + 1;
+        while(k < Limit){
+            T->Keys[k - 1] = T->Keys[k];
+            k++;
+        }
+        T->Keys[Limit - 1] = INT32_MIN;
+        parent->Keys[i] = T->Keys[0];
+        T->keyNums--;
+    }else{
+        // 将T节点从parent中删除
+        if(T->child[0] == nullptr && i > 0){
+            // 当T为叶子节点并且不在最左边,修改叶子节点的连接
+            parent->child[i-1]->next = parent->child[i + 1];
+        }
+        Limit = parent->keyNums;
+        k = i + 1;
+        while(k < Limit){
+            parent->Keys[k - 1] = parent->Keys[k];
+            parent->child[k - 1] = parent->child[k];
+            k++;
+        }
+        parent->child[Limit - 1] = nullptr;
+        parent->Keys[Limit - 1] = INT32_MIN;
+        parent->keyNums--;
+    }
+    return T;
+}
+/**
+ * 查找T节点所在树枝中最右边的叶子节点
+ * @param T     叶子节点或索引节点
+ * @return      最右边的叶子节点
+ */
+TreeNode *BplusTree::FindMostRight(TreeNode *T) {
+    TreeNode* tmp = T;
+    while(tmp && tmp->child[tmp->keyNums - 1]){
+        tmp = tmp->child[tmp->keyNums - 1];
+    }
+    return tmp;
+}
+/**
+ * 查找T节点所在树枝中最左边的叶子节点
+ * @param T     叶子节点或索引节点
+ * @return      最左边的叶子节点
+ */
+TreeNode *BplusTree::FindMostLeft(TreeNode *T) {
+    TreeNode* tmp = T;
+    while(tmp && tmp->child[0]){
+        tmp = tmp->child[0];
+    }
+    return tmp;
+}
+/**
+ * 查找key
+ * @param key   待查找的key
+ * @return      是否找到
+ */
+bool BplusTree::Find(int key) {
+    return false;
+}
+/**
+ * 遍历叶子节点
+ */
+void BplusTree::TraveData() {
+
 }
