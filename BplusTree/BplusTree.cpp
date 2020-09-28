@@ -11,7 +11,7 @@ TreeNode::TreeNode(int m) {
     child = new TreeNode*[M + 1];
     for(int i = 0; i <= M; i++) {
         child[i] = nullptr;
-        Keys[i] = INT32_MAX;
+        Keys[i] = INT32_MIN;
     }
     next = nullptr;
 

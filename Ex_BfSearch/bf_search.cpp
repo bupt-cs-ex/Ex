@@ -66,6 +66,6 @@ int main() {
     fclose(outfile);
     fclose(infile);
 
-    printf("Find %d keys,fp:%lf, use %lu ms\n", count, double(count - 6306) / 6306, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
+    printf("Find %d keys,fp:%lf, use %lu ms\n", count, double(count - 6306) / 1270000, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
     return 0;
 }
