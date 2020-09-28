@@ -24,6 +24,7 @@ public:
     void Insert(int key);
     bool Find(int key);
     void TraveData();
+    void FormatPrint();
 
 private:
     TreeNode* Recursive_Insert(TreeNode* T, int key, int i, TreeNode* parent);
@@ -34,6 +35,7 @@ private:
     TreeNode* RemoveElement(bool isKey, TreeNode* parent, TreeNode* T, int i, int j);
     TreeNode* FindMostRight(TreeNode* T);
     TreeNode* FindMostLeft(TreeNode* T);
+    bool FindByNode(TreeNode* node, int key);
     TreeNode* root;
     int M;
 };

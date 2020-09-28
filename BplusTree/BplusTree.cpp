@@ -3,6 +3,8 @@
 //
 
 #include "BplusTree.h"
+#include <queue>
+using namespace std;
 
 TreeNode::TreeNode(int m) {
     M = m;
@@ -48,7 +50,7 @@ TreeNode* BplusTree::Recursive_Insert(TreeNode* T, int key, int i, TreeNode* par
         T = InsertElement(true, parent, T, key, i, j);
     }else{
         // T 是索引节点
-        Recursive_Insert(T->child[j], key, j, T);
+        T->child[j] = Recursive_Insert(T->child[j], key, j, T);
     }
     //调整节点
     int Limit = M;
@@ -154,7 +156,7 @@ TreeNode *BplusTree::SplitNode(TreeNode* parent, TreeNode* T, int i) {
     }
     if(parent != nullptr){
         //将新节点插入到父节点中，位置是i+1 (当前节点的位置为i)
-        InsertElement(false, parent, newNode, 0, i+1, 0);
+        InsertElement(false, parent, newNode, 0, i + 1, 0);
     }else{
         //当前节点T为根节点，分裂之后则需要创建新的根节点
         parent = new TreeNode(M);
@@ -225,7 +227,7 @@ TreeNode *BplusTree::MoveElement(TreeNode *Src, TreeNode *Dst, TreeNode *parent,
         parent->Keys[i + 1] = Dst->Keys[0];
         //更新Src 和 Dst下的叶子节点的连接
         if(Src->keyNums > 0)
-            FindMostLeft(Src)->next = FindMostRight(Dst);
+            FindMostRight(Src)->next = FindMostLeft(Dst);
 
     }else{
         // 节点Src 在 Dst 后
@@ -336,4 +338,64 @@ bool BplusTree::Find(int key) {
  */
 void BplusTree::TraveData() {
 
+}
+/**
+ * 格式化打印出树
+ */
+void BplusTree::FormatPrint() {
+    queue<pair<TreeNode*, int>> q;
+    TreeNode* p ;
+    int level = 0;
+    q.push({root, level});
+    while(!q.empty()){
+        auto tmp = q.front();
+        q.pop();
+        p = tmp.first;
+        int cur_level = tmp.second;
+        if(p == nullptr)
+            continue;
+        if(cur_level > level){
+            printf("\n");
+            level = cur_level;
+        }
+        printf("[");
+        for(int i = 0; i < p->keyNums; i++)
+            printf("%d,", p->Keys[i]);
+
+        for(int i = p->keyNums; i < M; i++)
+            printf("NULL,");
+        printf("]");
+        if(p->child[0]){
+            // p为索引节点
+            printf("\t");
+            for(int i = 0; i < p->keyNums; i++)
+                q.push({p->child[i], cur_level + 1});
+        }else{
+            // p为叶子节点
+            printf("--->");
+        }
+    }
+}
+
+bool BplusTree::FindByNode(TreeNode *node, int key) {
+    if(node == nullptr)
+        return false;
+    if(node->child[0]){
+        // node为索引节点
+        int i = 0;
+        while(i < node->keyNums && key >= node->Keys[i]){
+            if(key == node->Keys[i])
+                return true;
+            i++;
+        }
+        if(i > 0)
+            i--;
+        return FindByNode(node->child[i], key);
+    }else{
+        // node为叶子节点
+        for(int i = 0; i < node->keyNums; i++)
+            if(node->Keys[i] == key)
+                return true;
+        return false;
+    }
 }
