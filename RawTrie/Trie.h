@@ -11,12 +11,12 @@
 class TrieNode{
 public:
     TrieNode(char v, bool isWord= false){
-        memset(child, NULL, sizeof(child));
+        memset(child, NULL, sizeof(child)/sizeof(TrieNode*));
         this->isWord = isWord;
         val = v;
     }
     ~TrieNode(){
-        for(int i = 0; i < sizeof(child); i++)
+        for(int i = 0; i < sizeof(child)/sizeof(TrieNode*); i++)
             delete child[i];
     }
     TrieNode* child[256];

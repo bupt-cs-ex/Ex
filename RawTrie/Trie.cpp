@@ -14,6 +14,7 @@ void Trie::Insert(char *key) {
         return;
     TrieNode* cur = root;
     int len = strlen(key);
+    // 迭代将每个字符插入到child域中
     for(int i = 0; i < len; i++){
         int index = key[i] + 128;
         if(!cur->child[index])
