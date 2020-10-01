@@ -9,14 +9,29 @@ using namespace std;
 TreeNode::TreeNode(int m) {
     M = m;
     keyNums = 0;
-    Keys = new int[M + 1];
+    Keys = new char*[M + 1];
     child = new TreeNode*[M + 1];
     for(int i = 0; i <= M; i++) {
         child[i] = nullptr;
-        Keys[i] = INT32_MIN;
+        Keys[i] = nullptr;
     }
     next = nullptr;
 
+}
+/**
+ * TreeNode节点析构函数
+ * 当节点为叶子节点时才会释放空间
+ */
+TreeNode::~TreeNode() {
+    if(child[0] == nullptr){
+        for(int i = 0; i < keyNums; i++)
+            delete Keys[i];
+    }else{
+        for(int i = 0; i < keyNums; i++)
+            delete child[i];
+    }
+    delete[] Keys;
+    delete[] child;
 }
 
 BplusTree::BplusTree(int m) {
@@ -25,9 +40,14 @@ BplusTree::BplusTree(int m) {
     M = m;
     root = new TreeNode(M);
 }
-
-void BplusTree::Insert(int key) {
-    root = Recursive_Insert(root, key, 0, nullptr);
+/**
+ * 插入
+ * @param key 待插入的key
+ */
+void BplusTree::Insert(char* key) {
+    char *key_copy = new char[strlen(key)];
+    strcpy(key_copy, key);
+    root = Recursive_Insert(root, key_copy, 0, nullptr);
 }
 /**
  * 递归插入key
@@ -36,10 +56,10 @@ void BplusTree::Insert(int key) {
  * @param i 当前节点是其父节点的第i叉
  * @param parent 节点T的父节点
  */
-TreeNode* BplusTree::Recursive_Insert(TreeNode* T, int key, int i, TreeNode* parent) {
+TreeNode* BplusTree::Recursive_Insert(TreeNode* T, char* key, int i, TreeNode* parent) {
     int j = 0;
-    while(j < T->keyNums && key >= T->Keys[j]){
-        if(key == T->Keys[j])
+    while(j < T->keyNums && strcmp(key, T->Keys[j]) >= 0){
+        if(strcmp(key, T->Keys[j]) == 0)
             return T;         //有重复的值，则无需插入
         j++;
     }
@@ -89,16 +109,17 @@ TreeNode* BplusTree::Recursive_Insert(TreeNode* T, int key, int i, TreeNode* par
  * @param j         对parent节点插入T节点时，i为待插入的位置。j、key无用
  * @return          返回插入的节点或插入key的节点
  */
-TreeNode *BplusTree::InsertElement(bool isKey, TreeNode* parent, TreeNode* T, int key, int i, int j) {
+TreeNode *BplusTree::InsertElement(bool isKey, TreeNode* parent, TreeNode* T, char* key, int i, int j) {
     int k;
     if(isKey){
-        //  将key插入到T节点移除
+        //  将key插入到T节点处
         k = T->keyNums - 1;
         //一趟插入排序
         while(k >= j){
             T->Keys[k + 1] = T->Keys[k];
             k-- ;
         }
+        // 插入 key
         T->Keys[j] = key;
         if(parent){
             //必要时更新父节点key
@@ -114,7 +135,7 @@ TreeNode *BplusTree::InsertElement(bool isKey, TreeNode* parent, TreeNode* T, in
             T->next = parent->child[i];
         }
         k = parent->keyNums - 1;
-        while (k >= j){
+        while (k >= i){
             // 需要同时更新孩子节点和key列表
             parent->child[k + 1] = parent->child[k];
             parent->Keys[k + 1] = parent->Keys[k];
@@ -148,7 +169,7 @@ TreeNode *BplusTree::SplitNode(TreeNode* parent, TreeNode* T, int i) {
             T->child[j] = nullptr;
         }
         newNode->Keys[k] = T->Keys[j];
-        T->Keys[j] = INT32_MIN;
+        T->Keys[j] = nullptr;
         newNode->keyNums++ ;
         T->keyNums--;
         k++;
@@ -156,13 +177,13 @@ TreeNode *BplusTree::SplitNode(TreeNode* parent, TreeNode* T, int i) {
     }
     if(parent != nullptr){
         //将新节点插入到父节点中，位置是i+1 (当前节点的位置为i)
-        InsertElement(false, parent, newNode, 0, i + 1, 0);
+        InsertElement(false, parent, newNode, nullptr, i + 1, 0);
     }else{
         //当前节点T为根节点，分裂之后则需要创建新的根节点
         parent = new TreeNode(M);
         //将两节点插入到根节点中的0，1位置上去
-        InsertElement(false, parent, T, 0, 0, 0);
-        InsertElement(false, parent, newNode, 0, 1, 0);
+        InsertElement(false, parent, T, nullptr, 0, 0);
+        InsertElement(false, parent, newNode, nullptr, 1, 0);
         return parent;
     }
     return T;
@@ -173,7 +194,7 @@ TreeNode *BplusTree::SplitNode(TreeNode* parent, TreeNode* T, int i) {
  * @param i      当前节点在父节点的位置
  * @return       有多余key空间的兄弟节点或nullptr
  */
-TreeNode *BplusTree::FindSibling(TreeNode *parent, int i) {
+TreeNode *BplusTree::FindSibling(TreeNode *parent, int i) const {
     TreeNode* Sibling = nullptr;
     int Limit = M;
     if(i == 0){
@@ -195,11 +216,11 @@ TreeNode *BplusTree::FindSibling(TreeNode *parent, int i) {
  * @return          父节点
  */
 TreeNode *BplusTree::MoveElement(TreeNode *Src, TreeNode *Dst, TreeNode *parent, int i, int n) {
-    int tempKey;
+    char* tempKey;
     TreeNode* child;
     int j = 0;
     bool isSrcFirst = false;        //是否Src节点在前面
-    if(Src->Keys[0] < Dst->Keys[0])
+    if(strcmp(Src->Keys[0], Dst->Keys[0]) < 0)
         isSrcFirst = true;
 
     if(isSrcFirst){
@@ -210,7 +231,7 @@ TreeNode *BplusTree::MoveElement(TreeNode *Src, TreeNode *Dst, TreeNode *parent,
                 child = Src->child[Src->keyNums - 1];
                 RemoveElement(false, Src, child, Src->keyNums - 1, 0);
                 // 由于Src 在 Dst前面， 因此Src的子节点移动到Dst时需要插入到最前面，即 i = 0
-                InsertElement(false, Dst, child, 0, 0, 0);
+                InsertElement(false, Dst, child, nullptr, 0, 0);
                 j++;
             }
         }else{
@@ -237,7 +258,7 @@ TreeNode *BplusTree::MoveElement(TreeNode *Src, TreeNode *Dst, TreeNode *parent,
                 child = Src->child[0];
                 RemoveElement(false, Src, child, 0, 0);
                 // Src 在 Dst后面，因此需要将Src的最左边的孩子移动到Dst最右边，即 i = Dst->keyNums
-                InsertElement(false, Dst, child, 0, Dst->keyNums, 0);
+                InsertElement(false, Dst, child, nullptr, Dst->keyNums, 0);
                 j++;
             }
         }else{
@@ -279,7 +300,7 @@ TreeNode *BplusTree::RemoveElement(bool isKey, TreeNode *parent, TreeNode *T, in
             T->Keys[k - 1] = T->Keys[k];
             k++;
         }
-        T->Keys[Limit - 1] = INT32_MIN;
+        T->Keys[Limit - 1] = nullptr;
         parent->Keys[i] = T->Keys[0];
         T->keyNums--;
     }else{
@@ -296,7 +317,7 @@ TreeNode *BplusTree::RemoveElement(bool isKey, TreeNode *parent, TreeNode *T, in
             k++;
         }
         parent->child[Limit - 1] = nullptr;
-        parent->Keys[Limit - 1] = INT32_MIN;
+        parent->Keys[Limit - 1] = nullptr;
         parent->keyNums--;
     }
     return T;
@@ -330,15 +351,10 @@ TreeNode *BplusTree::FindMostLeft(TreeNode *T) {
  * @param key   待查找的key
  * @return      是否找到
  */
-bool BplusTree::Find(int key) {
-    return false;
+bool BplusTree::Find(char* key) {
+    return FindByNode(root, key);
 }
-/**
- * 遍历叶子节点
- */
-void BplusTree::TraveData() {
 
-}
 /**
  * 格式化打印出树
  */
@@ -360,14 +376,14 @@ void BplusTree::FormatPrint() {
         }
         printf("[");
         for(int i = 0; i < p->keyNums; i++)
-            printf("%d,", p->Keys[i]);
+            printf("%s,", p->Keys[i]);
 
         for(int i = p->keyNums; i < M; i++)
             printf("NULL,");
         printf("]");
         if(p->child[0]){
             // p为索引节点
-            printf("\t");
+            printf("       ");
             for(int i = 0; i < p->keyNums; i++)
                 q.push({p->child[i], cur_level + 1});
         }else{
@@ -377,14 +393,14 @@ void BplusTree::FormatPrint() {
     }
 }
 
-bool BplusTree::FindByNode(TreeNode *node, int key) {
+bool BplusTree::FindByNode(TreeNode *node, char* key) {
     if(node == nullptr)
         return false;
     if(node->child[0]){
         // node为索引节点
         int i = 0;
-        while(i < node->keyNums && key >= node->Keys[i]){
-            if(key == node->Keys[i])
+        while(i < node->keyNums && strcmp(key, node->Keys[i]) >= 0){
+            if(strcmp(key, node->Keys[i]) == 0)
                 return true;
             i++;
         }
@@ -394,8 +410,12 @@ bool BplusTree::FindByNode(TreeNode *node, int key) {
     }else{
         // node为叶子节点
         for(int i = 0; i < node->keyNums; i++)
-            if(node->Keys[i] == key)
+            if(strcmp(node->Keys[i], key) == 0)
                 return true;
         return false;
     }
+}
+
+BplusTree::~BplusTree() {
+    delete root;
 }
