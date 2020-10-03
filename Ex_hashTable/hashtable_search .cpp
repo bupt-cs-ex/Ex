@@ -2,6 +2,7 @@
 #include <math.h>
 #include "HashTable.h"
 #include <time.h>
+#include <unistd.h>
 using namespace std;
 
 unsigned int SDBMHash(char *str) {
@@ -16,6 +17,7 @@ unsigned int SDBMHash(char *str) {
 }
 
 int main() {
+    int pid = getpid();
     clock_t start_time = clock();
     int n = pow(2, 17);
     unsigned int count = 0;
