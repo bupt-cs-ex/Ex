@@ -18,7 +18,7 @@ BloomFilter::BloomFilter(unsigned int n, double e) {
     for(int i = 0; i < hash_num; i++) {
         seeds[i] = rand();
     }
-    std::cout<< "m:" << bit_size << " k:" << hash_num << std::endl;
+    //std::cout<< "m:" << bit_size << " k:" << hash_num << std::endl;
     memset(bit_array, 0b00000000, bit_size/8);      //  init 0
 }
 /**
