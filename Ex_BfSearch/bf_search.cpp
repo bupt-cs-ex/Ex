@@ -6,6 +6,7 @@
 using namespace std;
 
 int main() {
+    int pid = getpid();
     srand(time(0));
     clock_t start_time = clock();
     unsigned int count = 0;
@@ -78,11 +79,6 @@ int main() {
 
     clock_t end_time = clock();
     printf("runtime: %lu ms\n", (end_time - start_time) * 1000/CLOCKS_PER_SEC);
-
-<<<<<<< Updated upstream
-    printf("Find %d keys,fp:%lf, use %lu ms\n", count, double(count - 6306) / 1270000, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
-=======
     sleep(3);
->>>>>>> Stashed changes
     return 0;
 }
