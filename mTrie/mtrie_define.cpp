@@ -91,7 +91,7 @@ bool MTrie::Find(char *key)
 }
 
 
-//获取关键词 key 在 curKeyBitPos 开始的 n(nodeBitSize) 位，对应的节点序号(即n bits二进制对应的数值)
+//根据关键词 key 在 curKeyBitPos 开始的 n(nodeBitSize) 位bit，得到对应的节点序号(即n bits二进制对应的数值)
 int MTrie::getNodeIdx(char *key, int curKeyBitPos, int nodeBitSize)
 {
     int keyByteSize = strlen(key);
