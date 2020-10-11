@@ -1,6 +1,7 @@
 #include <time.h>
 #include "Trie.h"
 #include <unistd.h>
+#include <math.h>
 using namespace std;
 
 int main() {
@@ -65,7 +66,7 @@ int main() {
     fclose(outfile);
     fclose(infile);
 
-    printf("Find %d keys, use %lu ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
+    printf("string_match: %d, runtime: %lu ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
     return 0;
 }
 

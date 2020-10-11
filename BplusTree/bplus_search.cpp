@@ -11,7 +11,7 @@ int main() {
     BplusTree tree(M);
 
     //读取 dict.txt 的 keywords，插入到哈希表
-    FILE *infile = fopen("../dict.txt", "rb");
+    FILE *infile = fopen("dict.txt", "rb");
     if(infile == NULL) {
         printf("Failed to open dict.txt\n");
         return -1;
@@ -33,8 +33,8 @@ int main() {
     printf("Finished reading dict.txt\n");
 
     //读取 string.txt 的 keywords，查找哈希表，将查找到的 keywords 输出到 result.txt
-    infile = fopen("../string.txt", "rb");
-    FILE *outfile = fopen("../result.txt", "wb");
+    infile = fopen("string.txt", "rb");
+    FILE *outfile = fopen("bupt_03_1.txt", "wb");
     if(infile == nullptr) {
         printf("Failed to open string.txt\n");
         return -1;
@@ -65,8 +65,10 @@ int main() {
     fclose(outfile);
     fclose(infile);
 
-    printf("M = %d, Find %d keys, use %lu ms\n", M, count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
+    printf("M = %d, string_match: %d, runtime: %lu ms\n", M, count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
     //tree.FormatPrint();
+
+    sleep(3);
     return 0;
 }
 

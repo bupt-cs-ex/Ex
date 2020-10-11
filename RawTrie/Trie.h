@@ -5,6 +5,7 @@
 #ifndef RAWTRIE_TRIE_H
 #define RAWTRIE_TRIE_H
 #include <iostream>
+#include <string.h>
 /**
  * Trie树节点结构
  */

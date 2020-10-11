@@ -13,7 +13,7 @@ int main() {
     //读取 dict.txt 的 keywords，插入到mtrie
     FILE *infile = fopen("../dict.txt", "rb");
     if(infile == NULL) {
-        printf("Failed to open dict.txt\n");
+        //printf("Failed to open dict.txt\n");
         return -1;
     }
     while(!feof(infile)) {
@@ -30,17 +30,17 @@ int main() {
         m_trie.Insert(buff);        //插入mtrie
     }
     fclose(infile);
-    printf("Finished reading dict.txt\n");
+    //printf("Finished reading dict.txt\n");
 
     //读取 string.txt 的 keywords，查找mtrie，将查找到的 keywords 输出到 result.txt
     infile = fopen("../string.txt", "rb");
     FILE *outfile = fopen("../result.txt", "wb");
     if(infile == nullptr) {
-        printf("Failed to open string.txt\n");
+        //printf("Failed to open string.txt\n");
         return -1;
     }
     if(outfile == nullptr) {
-        printf("Failed to open result.txt\n");
+        //printf("Failed to open result.txt\n");
         return -1;
     }
     while(!feof(infile)) {
@@ -61,11 +61,12 @@ int main() {
         }
     }
     clock_t end_time = clock();
-    printf("Finished reading string.txt\n");
+    //printf("Finished reading string.txt\n");
     fclose(outfile);
     fclose(infile);
 
-    printf("Find %d keys, use %lu ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
+    printf("string_match: %d, runtime: %lu ms\n", count, (end_time - start_time) * 1000/CLOCKS_PER_SEC);
 
+    sleep(3);
     return 0;
 }
