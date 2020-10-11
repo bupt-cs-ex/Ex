@@ -7,7 +7,6 @@ using namespace std;
 int main() {
     auto pid = getpid();
     clock_t start_time = clock();
-    int n = pow(2, 17);
     unsigned int count = 0;
     Trie tree;
 
