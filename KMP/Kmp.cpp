@@ -13,7 +13,11 @@ int* GetNext(char* p){
         if(k == -1 || p[k] == p[j]){
             k++;
             j++;
-            next[j] = k;
+            // 优化next数组
+            if(p[j] != p[k])
+                next[j] = k;
+            else
+                next[j] = next[k];
         }else
             k = next[k];
     }
