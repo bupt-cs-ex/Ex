@@ -59,17 +59,6 @@ void queue::reSize() {
     tail = length - 1;
 }
 
-void queue::travel() {
-    for (int i = 0; i < capacity; ++i) {
-        if(i == head)
-            printf("S(%d)", i);
-        else if(i == tail)
-            printf("E(%d)", i);
-        else
-            printf("%d", i);
-    }
-}
-
 bool queue::isEmpty() {
     return length == 0;
 }

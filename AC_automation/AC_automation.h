@@ -13,6 +13,7 @@ public:
     AC_automation();
     void Insert(char* s);
     void build();
+    int match(char* key);
 private:
     Node* root;
 };

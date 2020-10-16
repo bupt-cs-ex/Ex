@@ -29,7 +29,7 @@ void AC_automation::Insert(char *s) {
  */
 void AC_automation::build() {
     queue q;
-    Node* parent;
+    Node* p;
     Node* temp;
     q.push_back(root);
     while (!q.isEmpty()){
@@ -39,19 +39,43 @@ void AC_automation::build() {
                 if(temp == root){
                     temp->child[i]->fail = root;
                 }else{
-                    parent = temp->fail;
-                    while (parent){
-                        if(parent->child[i]){
-                            temp->child[i]->fail = parent->child[i];
+                    p = temp->fail;
+                    while (p){
+                        if(p->child[i]){
+                            temp->child[i]->fail = p->child[i];
                             break;
                         }
-                        parent = parent->fail;
+                        p = p->fail;
                     }
-                    if(parent == nullptr)
+                    if(p == nullptr)
                         temp->child[i]->fail = root;
                 }
                 q.push_back(temp->child[i]);
             }
         }
     }
+}
+
+int AC_automation::match(char *key) {
+    int count = 0;
+    Node* p = root;
+    for(int i = 0; i < strlen(key); i++){
+        int index = key[i] - 'a';
+        while (p->child[index] == nullptr && p != root)
+            p = p->fail;
+        p = p->child[index];
+        if(p == nullptr)
+            p = root;
+        Node* temp = p;
+        while (temp != root){
+            // 当前节点未被访问
+            if(temp->sum >= 0){
+                count += temp->sum;
+                temp->sum = -1;
+            }else
+                break;
+            temp = temp->fail;
+        }
+    }
+    return count;
 }

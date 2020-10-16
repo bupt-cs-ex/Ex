@@ -27,7 +27,6 @@ public:
     Node* front();
     Node* back();
     Node* pop_front();
-    void travel();
     bool isEmpty();
 private:
     int capacity;       // 容量
