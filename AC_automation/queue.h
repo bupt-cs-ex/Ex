@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <string.h>
 
+/**
+ * AC自动机的节点结构
+ */
 class Node{
 public:
 Node(){
@@ -16,9 +19,12 @@ Node(){
 }
 Node* child[26];
 Node* fail;
-int sum;
+int sum;        // 当前节点是否为输出节点以及输出的个数
 };
 
+/**
+ * 循环队列，用于dfs构建AC自动机的fail域
+ */
 class queue {
 public:
     queue(int n=16);

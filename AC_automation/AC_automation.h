@@ -11,9 +11,9 @@
 class AC_automation {
 public:
     AC_automation();
-    void Insert(char* s);
+    void Insert(char* pattern);
     void build();
-    int match(char* key);
+    int match(char* text);
 private:
     Node* root;
 };
