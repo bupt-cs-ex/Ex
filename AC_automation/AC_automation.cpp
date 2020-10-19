@@ -36,7 +36,7 @@ void AC_automation::Build() {
     q.push_back(root);          // root节点入队
     while (!q.isEmpty()){
         temp = q.pop_front();   // 取出队列首元素
-        for(int i = 0;i < 26; i++){
+        for(int i = 0;i < 256; i++){
             if(temp->child[i]){
                 if(temp == root){
                     // 根节点的所有子节点fail域为root
@@ -79,7 +79,9 @@ void AC_automation::Match(char *text) {
         p = p->child[index];
         if(p == nullptr)
             p = root;
+        // 当前节点存在output list
         if(p != root && !p->outList.isEmpty()){
+            // 查看output列表 ，添加到统计信息中
             for(int i = 0; i < p->outList.size(); i++){
                 int pos = findKey(p->outList[i]);
                 stats[pos]->count++;
@@ -89,16 +91,23 @@ void AC_automation::Match(char *text) {
 
     }
 }
-
+/**
+ * 格式化打印key word 统计信息
+ */
 void AC_automation::OutputResult() {
     for(int i = 0; i < stats.size(); i++){
-        printf("%s, %d, offset: ", stats[i]->key, stats[i]->count);
+        printf("%-10s %-4d, offset: ", stats[i]->key, stats[i]->count);
+        // 逆序输出
         for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
             printf("%d ",stats[i]->offsetList[j]);
         printf("\n");
     }
 }
-
+/**
+ * 快速查找key在key list中的位置
+ * @param key  待查找key
+ * @return
+ */
 int AC_automation::findKey(char *key) {
     return key2index[key];
 }

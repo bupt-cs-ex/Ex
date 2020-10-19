@@ -13,10 +13,10 @@
 class Node{
 public:
     Node(){
-        memset(child, NULL, sizeof(Node*) * 26);
+        memset(child, NULL, sizeof(Node*) * 256);
         fail = nullptr;
     }
-    Node* child[26];
+    Node* child[256];
     Node* fail;
     List<char*> outList;    // 当前节点的输出列表
 
@@ -27,7 +27,7 @@ public:
  */
 class queue {
 public:
-    queue(int n=16);
+    queue(int n=2048);
     ~queue();
     void push_back(Node* p);
     Node* front();

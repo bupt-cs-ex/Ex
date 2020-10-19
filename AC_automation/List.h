@@ -5,14 +5,17 @@
 #ifndef AC_AUTOMATION_LIST_H
 #define AC_AUTOMATION_LIST_H
 #include <iostream>
+/**
+ * 可变长数组List类实现
+ * @tparam T 类型
+ */
 template<class T>
 class List {
 public:
-    List(int n=16);
+    List(int n=2048);
     void append(T value);
     bool isEmpty();
     int size();
-    void output();
     T& operator[](int n);
     ~List();
 private:
@@ -60,12 +63,6 @@ bool List<T>::isEmpty() {
 template<class T>
 int List<T>::size() {
     return length;
-}
-
-template<class T>
-void List<T>::output() {
-    for(int i = 0; i < length; i++)
-        std::cout<< array[i] << std::endl;
 }
 
 template<class T>

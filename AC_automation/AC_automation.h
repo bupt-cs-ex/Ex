@@ -7,8 +7,12 @@
 #include <string.h>
 #include <stdio.h>
 #include "queue.h"
-#include <map>
+#include <unordered_map>
 using namespace std;
+/**
+ *  统计信息
+ *  存储 key count offset1, offset2 ...
+ */
 class Stat{
 public:
     Stat(char* k = nullptr){
@@ -20,6 +24,9 @@ public:
     List<unsigned> offsetList;
 };
 
+/**
+ * AC 自动机
+ */
 class AC_automation {
 public:
     AC_automation();
@@ -29,9 +36,9 @@ public:
     void Match(char* text);
     void OutputResult();
 private:
-    Node* root;
-    List<Stat*> stats;       //统计信息
-    map<char*, unsigned> key2index;
+    Node* root;                         // 根节点
+    List<Stat*> stats;                  // 记录每个key的统计信息
+    unordered_map<char*, unsigned> key2index;     // map 快速查找key在stats中的位置
     int findKey(char* key);
 };
 
