@@ -12,10 +12,11 @@ using namespace std;
 /**
  *  统计信息
  *  存储 key count offset1, offset2 ...
+ *  存储key的源
  */
 class Stat{
 public:
-    Stat(char* k = nullptr){
+    Stat(char* k = nullptr) {
         key = k;
         count = 0;
     }
@@ -33,8 +34,10 @@ public:
     ~AC_automation();
     void Insert(char* pattern);
     void Build();
-    void Match(char* text);
+    Node* Match(char* text, int base=0, Node* start=nullptr);
+    void MatchByFile(char* filename, char* mode="rb");
     void OutputResult();
+    void OutputToFile(char* filename);
 private:
     Node* root;                         // 根节点
     List<Stat*> stats;                  // 记录每个key的统计信息
