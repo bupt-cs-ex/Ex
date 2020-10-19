@@ -33,7 +33,7 @@ int main() {
     printf("read pattern.txt: %lu ms\n", (end_time - start_time) * 1000/CLOCKS_PER_SEC);
 
     ac.Build();
-    printf("Build success!");
+    printf("Build success!\n");
     printf("Build: %lu ms\n", (clock() - end_time) * 1000/CLOCKS_PER_SEC);
     end_time = clock();
 
