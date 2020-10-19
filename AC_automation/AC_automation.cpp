@@ -16,7 +16,7 @@ void AC_automation::Insert(char *pattern) {
         return;
     Node* p = root;
     for(int i = 0; i < strlen(pattern); i++){
-        int index = pattern[i] - 'a';
+        int index = pattern[i] + 128;
         if(p->child[index] == nullptr){
             p->child[index] = new Node();
         }
@@ -72,7 +72,7 @@ void AC_automation::Build() {
 void AC_automation::Match(char *text) {
     Node* p = root;
     for(int offset = 0; offset < strlen(text); offset++){
-        int index = text[offset] - 'a';
+        int index = text[offset] + 128;
         // 先查找是否存在child[index],不存在则跳转至fail
         while (p->child[index] == nullptr && p != root)
             p = p->fail;
