@@ -6,20 +6,20 @@
 #define AC_AUTOMATION_QUEUE_H
 #include <stdio.h>
 #include <string.h>
-
+#include "List.h"
 /**
  * AC自动机的节点结构
  */
 class Node{
 public:
-Node(){
-    memset(child, NULL, sizeof(Node*) * 26);
-    fail = nullptr;
-    sum = 0;
-}
-Node* child[26];
-Node* fail;
-int sum;        // 当前节点是否为输出节点以及输出的个数
+    Node(){
+        memset(child, NULL, sizeof(Node*) * 26);
+        fail = nullptr;
+    }
+    Node* child[26];
+    Node* fail;
+    List<char*> outList;    // 当前节点的输出列表
+
 };
 
 /**

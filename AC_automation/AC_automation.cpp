@@ -22,12 +22,14 @@ void AC_automation::Insert(char *pattern) {
         }
         p = p->child[index];
     }
-    p->sum++;
+    p->outList.append(pattern);
+    stats.append(new Stat(pattern));
+    key2index.insert({pattern, stats.size() - 1 });
 }
 /**
  * 构造fail指针域
  */
-void AC_automation::build() {
+void AC_automation::Build() {
     queue q;
     Node* p;
     Node* temp;
@@ -67,28 +69,41 @@ void AC_automation::build() {
  * @param text  长文本串
  * @return      匹配成功的模式串个数
  */
-int AC_automation::match(char *text) {
-    int count = 0;
+void AC_automation::Match(char *text) {
     Node* p = root;
-    for(int i = 0; i < strlen(text); i++){
-        int index = text[i] - 'a';
+    for(int offset = 0; offset < strlen(text); offset++){
+        int index = text[offset] - 'a';
         // 先查找是否存在child[index],不存在则跳转至fail
         while (p->child[index] == nullptr && p != root)
             p = p->fail;
         p = p->child[index];
         if(p == nullptr)
-            p = root;           //完全找不到匹配的单词，则跳回根节点，匹配下一个词
-        Node* temp = p;
-        while (temp != root){
-            // 当前节点未被访问过
-            if(temp->sum >= 0){
-                // 累加当前节点包含的模式串个数，然后将其置为-1，避免重复计算
-                count += temp->sum;
-                temp->sum = -1;
-            }else
-                break;  // 当前节点被访问过，跳出
-            temp = temp->fail;
+            p = root;
+        if(p != root && !p->outList.isEmpty()){
+            for(int i = 0; i < p->outList.size(); i++){
+                int pos = findKey(p->outList[i]);
+                stats[pos]->count++;
+                stats[pos]->offsetList.append(offset - strlen(p->outList[i]) + 1);
+            }
         }
+
     }
-    return count;
+}
+
+void AC_automation::OutputResult() {
+    for(int i = 0; i < stats.size(); i++){
+        printf("%s, %d, offset: ", stats[i]->key, stats[i]->count);
+        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
+            printf("%d ",stats[i]->offsetList[j]);
+        printf("\n");
+    }
+}
+
+int AC_automation::findKey(char *key) {
+    return key2index[key];
+}
+
+AC_automation::~AC_automation() {
+    for(int i = 0; i < stats.size(); i++)
+        delete stats[i];
 }
