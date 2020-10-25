@@ -168,12 +168,15 @@ void AC_automachine::OutputToFile(char *filename) {
         if(stats[i]->count == 0)
             continue;
         unique++;
-        fprintf(outfile, "%s\t%d\toffset: ",stats[i]->key, stats[i]->count);
+        fputs(stats[i]->key,outfile);
+        fputs("\t", outfile);
+        fprintf(outfile, "%u\t",stats[i]->count);
+        fputs("offset:", outfile);
 //        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
 //            fputc(stats[i]->offsetList[j], outfile);
-        for(int j = 0; j < 3 && j < stats[i]->offsetList.size(); j++)
-            fprintf(outfile, "%ud\t", stats[i]->offsetList[j]);
-        fprintf(outfile, "\n");
+        for(int j = 0; j < 3 && j < stats[i]->count; j++)
+            fprintf(outfile, "%u\t", stats[i]->offsetList[j]);
+        fputs("\n", outfile);
     }
     printf("finished\n");
     printf("unique:%d\n", unique);
