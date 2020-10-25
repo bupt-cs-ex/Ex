@@ -74,7 +74,7 @@ void AC_automachine::Build() {
  * @param start 起始状态节点，若为nullptr，从root开始
  * @return      匹配之后的状态
  */
-Node* AC_automachine::Match(char *text, int base, Node* start) {
+Node* AC_automachine::Match(char *text, unsigned int base, Node* start) {
     Node* p = (start == nullptr ? root : start);
     int textBitLen = strlen(text) * 8;
     int nodeBitLen = getNodeBitSize();
@@ -92,7 +92,7 @@ Node* AC_automachine::Match(char *text, int base, Node* start) {
             for(int i = 0; i < p->outList.size(); i++){
                 int pos = findKey(p->outList[i]);
                 stats[pos]->count++;
-                stats[pos]->offsetList.append(base + bitPos / 8 - strlen(p->outList[i]) + 1);
+                stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(p->outList[i]) + 1);
             }
         }
     }
@@ -134,7 +134,7 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
         printf("Failed to open %s\n", filename);
         return;
     }
-    int base = 0;
+    unsigned int base = 0;
     char buff[2048 + 1];
     Node* start = root;
     while(!feof(infile)) {
@@ -148,7 +148,7 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
         }
         buff[idx] = '\0';           //一个keyword读取结束
         start = Match(buff, base, start);
-        base += 2048;
+        base += 2048 * 8;
     }
     fclose(infile);
 }
@@ -157,6 +157,7 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
  * @param filename 文件名，带后缀
  */
 void AC_automachine::OutputToFile(char *filename) {
+    int unique = 0;
     FILE *outfile = fopen(filename, "wb");
     if(outfile == nullptr) {
         printf("Failed to open %s\n", filename);
@@ -164,16 +165,18 @@ void AC_automachine::OutputToFile(char *filename) {
     }
     // 写入文件
     for(int i = 0; i < stats.size(); i++){
-        fputs(stats[i]->key, outfile);
-        fputs(" ", outfile);
-        fputc(stats[i]->count, outfile);
-        fputs("offset: ", outfile);
-        // 逆序输出
-        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
-            fputc(stats[i]->offsetList[j], outfile);
-        fputs("\n", outfile);
+        if(stats[i]->count == 0)
+            continue;
+        unique++;
+        fprintf(outfile, "%s\t%d\toffset: ",stats[i]->key, stats[i]->count);
+//        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
+//            fputc(stats[i]->offsetList[j], outfile);
+        for(int j = 0; j < 3 && j < stats[i]->offsetList.size(); j++)
+            fprintf(outfile, "%ud\t", stats[i]->offsetList[j]);
+        fprintf(outfile, "\n");
     }
     printf("finished\n");
+    printf("unique:%d\n", unique);
     fclose(outfile);
 }
 /**

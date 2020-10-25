@@ -23,7 +23,7 @@ public:
     }
     char* key;
     unsigned count;
-    List<unsigned> offsetList;
+    List<unsigned int> offsetList;
 };
 
 /**
@@ -35,7 +35,7 @@ public:
     ~AC_automachine();
     void Insert(char* pattern);
     void Build();
-    Node* Match(char* text, int base=0, Node* start=nullptr);
+    Node* Match(char* text, unsigned int base=0, Node* start=nullptr);
     void MatchByFile(char* filename, char* mode="rb");
     void OutputResult();
     void OutputToFile(char* filename);
