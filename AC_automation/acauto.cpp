@@ -1,8 +1,10 @@
 #include <iostream>
-#include "AC_automation.h"
+#include "AC_automachine.h"
 #include <unistd.h>
+#include <ctime>
 int main() {
-    AC_automation ac;
+    int m = 4;
+    AC_automachine ac(m);
     List<char*> keyList;
     printf("pid:%d\n",getpid());
     clock_t start_time = clock();

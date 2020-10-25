@@ -1,5 +1,6 @@
 /**/cmake-build-debug
 /**/.idea
+/**/CMakeLists.txt
 /Ex_hashTable/cmake-build-debug
 /Ex_BfSearch/cmake-build-debug
 /Ex_hashTable/.idea
@@ -8,3 +9,5 @@
 /BplusTree/.idea
 /mTrie/cmake-build-debug
 /mTrie/.idea
+/AC_automation/pattern.txt
+/AC_automation/string.txt

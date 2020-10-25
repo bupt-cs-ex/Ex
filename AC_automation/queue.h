@@ -12,14 +12,23 @@
  */
 class Node{
 public:
-    Node(){
-        memset(child, NULL, sizeof(Node*) * 256);
+    Node(int m = 4){
+        this->m = m;
+        children = new Node* [m];
+        for(int i = 0; i < m; ++i) {
+            children[i] = nullptr;
+        }
         fail = nullptr;
     }
-    Node* child[256];
+    ~Node(){
+        for(int i = 0; i < m; ++i)
+            delete children[i];
+        delete [] children;
+    }
+    int m;                  // 分叉数
+    Node** children;
     Node* fail;
     List<char*> outList;    // 当前节点的输出列表
-
 };
 
 /**
