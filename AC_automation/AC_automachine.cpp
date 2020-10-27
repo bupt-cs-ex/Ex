@@ -66,11 +66,13 @@ void AC_automachine::Build() {
             }
         }
     }
+    printf("patterns:%d\n", stats.size());
 }
 
 /**
  * 匹配
  * @param text  长文本串
+ * @param base  偏移量
  * @param start 起始状态节点，若为nullptr，从root开始
  * @return      匹配之后的状态
  */
@@ -81,19 +83,24 @@ Node* AC_automachine::Match(char *text, unsigned int base, Node* start) {
     for(int bitPos = 0; bitPos < textBitLen; bitPos += nodeBitLen) {
         int nodeIdx = getNodeIdx(text, bitPos, nodeBitLen);
         // 先查找是否存在child[index],不存在则跳转至fail
-        while (p->children[nodeIdx] == nullptr && p != root)
+        while (p->children[nodeIdx] == nullptr && p != root){
             p = p->fail;
+            for(int i = 0; i < p->outList.size(); i++){
+                int pos = findKey(p->outList[i]);
+                stats[pos]->count++;
+                if(stats[pos]->offsetList.size() < 3)
+                    stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(p->outList[i]) + 1);
+            }
+        }
         p = p->children[nodeIdx];
         if(p == nullptr)
             p = root;
         // 当前节点存在output list
-        if(p != root && !p->outList.isEmpty()){
-            // 查看output列表 ，添加到统计信息中
-            for(int i = 0; i < p->outList.size(); i++){
-                int pos = findKey(p->outList[i]);
-                stats[pos]->count++;
+        for(int i = 0; i < p->outList.size(); i++){
+            int pos = findKey(p->outList[i]);
+            stats[pos]->count++;
+            if(stats[pos]->offsetList.size() < 3)
                 stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(p->outList[i]) + 1);
-            }
         }
     }
     return p;
@@ -170,7 +177,7 @@ void AC_automachine::OutputToFile(char *filename) {
         unique++;
         fputs(stats[i]->key,outfile);
         fputs("\t", outfile);
-        fprintf(outfile, "%u\t",stats[i]->count);
+        fprintf(outfile, "%d\t",stats[i]->count);
         fputs("offset:", outfile);
 //        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
 //            fputc(stats[i]->offsetList[j], outfile);
