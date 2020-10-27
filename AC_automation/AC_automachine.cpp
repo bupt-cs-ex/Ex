@@ -83,24 +83,21 @@ Node* AC_automachine::Match(char *text, unsigned int base, Node* start) {
     for(int bitPos = 0; bitPos < textBitLen; bitPos += nodeBitLen) {
         int nodeIdx = getNodeIdx(text, bitPos, nodeBitLen);
         // 先查找是否存在child[index],不存在则跳转至fail
-        while (p->children[nodeIdx] == nullptr && p != root){
+        while (p->children[nodeIdx] == nullptr && p != root)
             p = p->fail;
-            for(int i = 0; i < p->outList.size(); i++){
-                int pos = findKey(p->outList[i]);
-                stats[pos]->count++;
-                if(stats[pos]->offsetList.size() < 3)
-                    stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(p->outList[i]) + 1);
-            }
-        }
+
         p = p->children[nodeIdx];
         if(p == nullptr)
             p = root;
-        // 当前节点存在output list
-        for(int i = 0; i < p->outList.size(); i++){
-            int pos = findKey(p->outList[i]);
-            stats[pos]->count++;
-            if(stats[pos]->offsetList.size() < 3)
-                stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(p->outList[i]) + 1);
+        Node* tmp = p;
+        while(tmp != root){
+            for(int i = 0; i < tmp->outList.size(); i++){
+                int pos = findKey(tmp->outList[i]);
+                stats[pos]->count++;
+                if(stats[pos]->offsetList.size() < 3)
+                    stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(tmp->outList[i]) + 1);
+            }
+            tmp = tmp->fail;
         }
     }
     return p;
@@ -144,9 +141,10 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
     unsigned int base = 0;
     char buff[2048 + 1];
     Node* start = root;
+    int idx = 0;
     while(!feof(infile)) {
         int ch = fgetc(infile);     //读取一个字符
-        int idx = 0;
+        idx = 0;
         //从文件中读取字符到缓冲区
         while(ch != -1 && idx < 2048) {
             buff[idx] = ch;
@@ -179,8 +177,6 @@ void AC_automachine::OutputToFile(char *filename) {
         fputs("\t", outfile);
         fprintf(outfile, "%d\t",stats[i]->count);
         fputs("offset:", outfile);
-//        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
-//            fputc(stats[i]->offsetList[j], outfile);
         for(int j = 0; j < 3 && j < stats[i]->count; j++)
             fprintf(outfile, "%u\t", stats[i]->offsetList[j]);
         fputs("\n", outfile);
@@ -222,3 +218,6 @@ int AC_automachine::getNodeIdx(char *key, int curKeyBitPos, int nodeBitSize) {
     }
     return nodeIdx;
 }
+
+
+
