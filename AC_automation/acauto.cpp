@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <ctime>
 int main() {
-    int m = 4;
+    int m = 256;
     AC_automachine ac(m);
     List<char*> keyList;
     printf("pid:%d\n",getpid());
@@ -25,7 +25,7 @@ int main() {
             ch = fgetc(infile);
         }
         buff[idx] = '\0';           //一个keyword读取结束
-        char* key = new char[idx];
+        char* key = new char[strlen(buff)];
         strcpy(key, buff);
         ac.Insert(key);            //插入ac自动机
     }
