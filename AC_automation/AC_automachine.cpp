@@ -45,7 +45,7 @@ void AC_automachine::Build() {
                     p = temp->fail;
                     while (p){
                         // 若父节点的fail节点存在child[i] ，
-                        // 则子节点的fail域指向父节点fail节点下子节点的fail域
+                        // 则子节点的fail域指向父节点fail节点的子节点
                         if(p->children[i]){
                             temp->children[i]->fail = p->children[i];
                             break;
@@ -137,7 +137,7 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
                 break;
             ch = fgetc(infile);
         }
-        buff[idx] = '\0';           //一个keyword读取结束
+        buff[idx] = '\0';           //一次读取完成
         start = Match(buff, base, start);
         base += idx;
     }
