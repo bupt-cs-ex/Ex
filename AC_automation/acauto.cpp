@@ -42,7 +42,7 @@ int main() {
     printf("Match: %lu ms\n", (clock() - end_time) * 1000/CLOCKS_PER_SEC);
     end_time = clock();
 
-    ac.OutputToFile("../result.txt");
+    ac.OutputToFile("../res.txt");
     printf("Output: %lu ms\n", (clock() - end_time) * 1000/CLOCKS_PER_SEC);
     end_time = clock();
     printf("All runtime: %lu ms\n", (end_time - start_time) * 1000/CLOCKS_PER_SEC);

@@ -129,14 +129,14 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
         int ch = fgetc(infile);     //读取一个字符
         idx = 0;
         //从文件中读取字符到缓冲区
-        while(ch != -1 && idx < 2048) {
+        while(idx < 2048 && ch != 0x0A && ch != -1) {
             buff[idx] = ch;
             ++idx;
             ch = fgetc(infile);
         }
         buff[idx] = '\0';           //一个keyword读取结束
         start = Match(buff, base, start);
-        base += 2048;
+        base += idx;
     }
     fclose(infile);
 }
