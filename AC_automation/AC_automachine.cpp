@@ -22,8 +22,7 @@ void AC_automachine::Insert(char *pattern) {
         }
         p = p->children[index];
     }
-
-    p->output = pattern;
+    p->outputList.append(pattern);
     stats.append(new Stat(pattern));
     key2index.insert({pattern, stats.size() - 1 });
 }
@@ -86,11 +85,13 @@ Node* AC_automachine::Match(char *text, unsigned int base, Node* start) {
             p = root;
         Node* tmp = p;
         while(tmp != root){
-            if(tmp->output){
-                int pos = findKey(tmp->output);
-                stats[pos]->count++;
-                if(stats[pos]->offsetList.size() < 3)
-                    stats[pos]->offsetList.append(base + offset - strlen(tmp->output) + 1);
+            if(!tmp->outputList.isEmpty()){
+                for(int i = 0; i < tmp->outputList.size(); i++){
+                    int pos = findKey(tmp->outputList[i]);
+                    stats[pos]->count++;
+                    if(stats[pos]->offsetList.size() < 3)
+                        stats[pos]->offsetList.append(base + offset - strlen(tmp->outputList[i]) + 1);
+                }
             }
             tmp = tmp->fail;
         }
@@ -129,9 +130,11 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
         int ch = fgetc(infile);     //读取一个字符
         idx = 0;
         //从文件中读取字符到缓冲区
-        while(idx < 2048 && ch != 0x0A && ch != -1) {
+        while(ch != 0x0A && ch != -1) {
             buff[idx] = ch;
             ++idx;
+            if(idx == 2048)
+                break;
             ch = fgetc(infile);
         }
         buff[idx] = '\0';           //一个keyword读取结束

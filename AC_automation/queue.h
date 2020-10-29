@@ -18,7 +18,6 @@ public:
             children[i] = nullptr;
         }
         fail = nullptr;
-        output = nullptr;
     }
     ~Node(){
         for(int i = 0; i < 256; ++i)
@@ -27,7 +26,7 @@ public:
     }
     Node** children;
     Node* fail;
-    char* output;
+    List<char*> outputList;
 };
 
 /**
