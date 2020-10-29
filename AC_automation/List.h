@@ -12,7 +12,7 @@
 template<class T>
 class List {
 public:
-    List(int n=2048);
+    List(int n=4);
     void append(T value);
     bool isEmpty();
     int size();

@@ -3,8 +3,7 @@
 #include <unistd.h>
 #include <ctime>
 int main() {
-    int m = 256;
-    AC_automachine ac(m);
+    AC_automachine ac;
     List<char*> keyList;
     printf("pid:%d\n",getpid());
     clock_t start_time = clock();

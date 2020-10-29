@@ -4,9 +4,8 @@
 
 #include "AC_automachine.h"
 
-AC_automachine::AC_automachine(int m) {
-    this->m = m;
-    root = new Node(m);
+AC_automachine::AC_automachine() {
+    root = new Node();
 }
 /**
  * 插入模式串
@@ -16,17 +15,15 @@ void AC_automachine::Insert(char *pattern) {
     if(pattern == nullptr)
         return;
     Node* p = root;
-    int patternBitLen = strlen(pattern) * 8;
-    int nodeBitLen = getNodeBitSize();
-    for(int bitPos = 0; bitPos < patternBitLen; bitPos += nodeBitLen) {
-        int nodeIdx = getNodeIdx(pattern, bitPos, nodeBitLen);
-        if(p->children[nodeIdx] == nullptr) {
-            p->children[nodeIdx] = new Node(m);
+    for(int i = 0; i < strlen(pattern); i++) {
+        int index = pattern[i] + 128;
+        if(p->children[index] == nullptr) {
+            p->children[index] = new Node();
         }
-        p = p->children[nodeIdx];
+        p = p->children[index];
     }
 
-    p->outList.append(pattern);
+    p->output = pattern;
     stats.append(new Stat(pattern));
     key2index.insert({pattern, stats.size() - 1 });
 }
@@ -40,7 +37,7 @@ void AC_automachine::Build() {
     q.push_back(root);          // root节点入队
     while (!q.isEmpty()){
         temp = q.pop_front();   // 取出队列首元素
-        for(int i = 0; i < m; i++){
+        for(int i = 0; i < 256; i++){
             if(temp->children[i]){
                 if(temp == root){
                     // 根节点的所有子节点fail域为root
@@ -78,41 +75,27 @@ void AC_automachine::Build() {
  */
 Node* AC_automachine::Match(char *text, unsigned int base, Node* start) {
     Node* p = (start == nullptr ? root : start);
-    int textBitLen = strlen(text) * 8;
-    int nodeBitLen = getNodeBitSize();
-    for(int bitPos = 0; bitPos < textBitLen; bitPos += nodeBitLen) {
-        int nodeIdx = getNodeIdx(text, bitPos, nodeBitLen);
+    for(int offset = 0; offset < strlen(text); offset++) {
         // 先查找是否存在child[index],不存在则跳转至fail
-        while (p->children[nodeIdx] == nullptr && p != root)
+        int index = text[offset] + 128;
+        while (p->children[index] == nullptr && p != root)
             p = p->fail;
 
-        p = p->children[nodeIdx];
+        p = p->children[index];
         if(p == nullptr)
             p = root;
         Node* tmp = p;
         while(tmp != root){
-            for(int i = 0; i < tmp->outList.size(); i++){
-                int pos = findKey(tmp->outList[i]);
+            if(tmp->output){
+                int pos = findKey(tmp->output);
                 stats[pos]->count++;
                 if(stats[pos]->offsetList.size() < 3)
-                    stats[pos]->offsetList.append((base + bitPos) / 8 - strlen(tmp->outList[i]) + 1);
+                    stats[pos]->offsetList.append(base + offset - strlen(tmp->output) + 1);
             }
             tmp = tmp->fail;
         }
     }
     return p;
-}
-/**
- * 格式化打印key word 统计信息
- */
-void AC_automachine::OutputResult() {
-    for(int i = 0; i < stats.size(); i++){
-        printf("%s\t%-4d, offset: ", stats[i]->key, stats[i]->count);
-        // 逆序输出
-        for(int j = stats[i]->offsetList.size() - 1; j >= 0; j--)
-            printf("%d ",stats[i]->offsetList[j]);
-        printf("\n");
-    }
 }
 /**
  * 快速查找key在key list中的位置
@@ -153,7 +136,7 @@ void AC_automachine::MatchByFile(char *filename, char *mode) {
         }
         buff[idx] = '\0';           //一个keyword读取结束
         start = Match(buff, base, start);
-        base += 2048 * 8;
+        base += 2048;
     }
     fclose(infile);
 }
@@ -184,39 +167,6 @@ void AC_automachine::OutputToFile(char *filename) {
     printf("finished\n");
     printf("unique:%d\n", unique);
     fclose(outfile);
-}
-/**
- * 计算一个节点代表的比特数
- */
-int AC_automachine::getNodeBitSize() {
-    return int(log(m) / log(2));
-}
-/**
- * //获取关键词 key 在 curKeyBitPos 开始的 n(nodeBitSize) 位，对应的节点序号(即n bits二进制对应的数值)
- * @param key: 关键词
- * @param curKeyBitPos: 起始比特位
- * @param nodeBitSize: 比特长度
- */
-int AC_automachine::getNodeIdx(char *key, int curKeyBitPos, int nodeBitSize) {
-    int keyByteSize = strlen(key);
-    int startKeyByte = curKeyBitPos / 8;
-    int startBitPos = curKeyBitPos % 8;
-
-    int endKeyByte = (curKeyBitPos + nodeBitSize - 1) / 8;
-    int endBitPos = (curKeyBitPos + nodeBitSize - 1) % 8;
-    endBitPos = endKeyByte >= keyByteSize ? 7 : endBitPos;
-    endKeyByte = endKeyByte >= keyByteSize ? keyByteSize - 1 : endKeyByte;
-
-    int nodeIdx = 0;
-    for(int i = startKeyByte; i <= endKeyByte; ++i) {
-        int start = i == startKeyByte ? startBitPos : 0;
-        int end = i == endKeyByte ? endBitPos : 7;
-        for(int j = start; j <= end; ++j) {
-            int bitNum = (key[i] >> (8 - j - 1)) & 1;
-            nodeIdx = nodeIdx * 2 + bitNum;
-        }
-    }
-    return nodeIdx;
 }
 
 

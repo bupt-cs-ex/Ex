@@ -31,19 +31,15 @@ public:
  */
 class AC_automachine {
 public:
-    AC_automachine(int m);
+    AC_automachine();
     ~AC_automachine();
     void Insert(char* pattern);
     void Build();
     Node* Match(char* text, unsigned int base=0, Node* start=nullptr);
     void MatchByFile(char* filename, char* mode="rb");
-    void OutputResult();
     void OutputToFile(char* filename);
-    int getNodeBitSize();
-    int getNodeIdx(char *key, int curKeyBitPos, int nodeBitSize);   //获取关键词 key 在 curKeyBitPos 开始的 n(nodeBitSize) 位，对应的节点序号(即n bits二进制对应的数值)
 private:
     Node* root;                         // 根节点
-    int m;                              // 节点分叉数
     List<Stat*> stats;                  // 记录每个key的统计信息
     unordered_map<char*, unsigned> key2index;     // map 快速查找key在stats中的位置
     int findKey(char* key);
