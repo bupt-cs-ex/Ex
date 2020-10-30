@@ -6,12 +6,12 @@ using namespace std;
 int main() {
     auto pid = getpid();
     clock_t start_time = clock();
-    int M = 20;
+    int M = 5;
     unsigned int count = 0;
     BplusTree tree(M);
 
     //读取 dict.txt 的 keywords，插入到哈希表
-    FILE *infile = fopen("dict.txt", "rb");
+    FILE *infile = fopen("../dict.txt", "rb");
     if(infile == NULL) {
         printf("Failed to open dict.txt\n");
         return -1;
@@ -33,8 +33,8 @@ int main() {
     printf("Finished reading dict.txt\n");
 
     //读取 string.txt 的 keywords，查找哈希表，将查找到的 keywords 输出到 result.txt
-    infile = fopen("string.txt", "rb");
-    FILE *outfile = fopen("bupt_03_1.txt", "wb");
+    infile = fopen("../string.txt", "rb");
+    FILE *outfile = fopen("../bupt_03_1.txt", "wb");
     if(infile == nullptr) {
         printf("Failed to open string.txt\n");
         return -1;
