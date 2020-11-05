@@ -334,7 +334,49 @@
   - `RemoveElement`
 
     ```c++
-    c
+    /**
+     * 移除节点中的一个元素（key 或 node）:
+     *                  移除parent下的T节点
+     *                  移除T节点中的key
+     * @param isKey     移除的是否为key
+     * @param parent    节点T的父节点
+     * @param T         节点T
+     * @param i         节点T在父节点中的位置
+     * @param j         key在节点T中的位置
+     * @return          移除key后的节点或移除的节点
+     */
+    TreeNode *BplusTree::RemoveElement(bool isKey, TreeNode *parent, TreeNode *T, int i, int j) {
+        int k, Limit;
+        if(isKey){
+            // 从节点T移除key, key在T的j位置
+            Limit = T->keyNums;
+            k = j + 1;
+            while(k < Limit){
+                T->Keys[k - 1] = T->Keys[k];
+                k++;
+            }
+            T->Keys[Limit - 1] = nullptr;
+            parent->Keys[i] = T->Keys[0];
+            T->keyNums--;
+        }else{
+            // 将T节点从parent中删除
+            if(T->child[0] == nullptr && i > 0){
+                // 当T为叶子节点并且不在最左边,修改叶子节点的连接
+                parent->child[i-1]->next = parent->child[i + 1];
+            }
+            Limit = parent->keyNums;
+            k = i + 1;
+            while(k < Limit){
+                parent->Keys[k - 1] = parent->Keys[k];
+                parent->child[k - 1] = parent->child[k];
+                k++;
+            }
+            parent->child[Limit - 1] = nullptr;
+            parent->Keys[Limit - 1] = nullptr;
+            parent->keyNums--;
+        }
+        return T;
+    }
     ```
     
   - `FindMostRight`
@@ -414,7 +456,7 @@
 
 ## 3、实验过程
 
-1. 创建Trie树对象
+1. 创建Bplus树对象
 2. 读取dict.txt，将单词插入到B+树中
 3. 读取string.txt，在B+树中查找，若查到则将其写入result.txt
 
