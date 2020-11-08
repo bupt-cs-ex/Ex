@@ -3,4 +3,7 @@ project(BuildGraph)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(BuildGraph buildgraph.cpp)
+add_executable(BuildGraph buildgraph.cpp Matrix.cpp Matrix.h
+        List.h
+        AutoMachine.h
+        AutoMachine.cpp)
