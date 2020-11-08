@@ -5,6 +5,7 @@
 #include <string.h>
 
 string AutoMachine::URL = "http://news.sohu.com/*.shtml";// 待匹配的URL 静态成员
+string AutoMachine::path = "";
 
 void AutoMachine::init() {
     idx = 0;
@@ -30,7 +31,8 @@ void AutoMachine::_next(char c) {
         buff[idx++] = '\0';
         char* url = new char[idx];
         strcpy(url, buff);
-        result.append(url);     //完成一次匹配，将结果加入到result
+//        result.append(url);     //完成一次匹配，将结果加入到result
+        result.push_back(url);
         isStart = false;
         init();
     }

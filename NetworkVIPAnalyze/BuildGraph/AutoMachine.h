@@ -6,6 +6,7 @@
 #define BUILDGRAPH_AUTO_MACHINE
 #include "List.h"
 #include <string>
+#include <vector>
 using namespace std;
 
 /**
@@ -14,21 +15,26 @@ using namespace std;
  */
 class AutoMachine{
     static string URL;
+    static string path;
 public:
     AutoMachine(string path){
-        this->path = path;
+        AutoMachine::path = path;
         init();
+    }
+    ~AutoMachine(){
+//        for(int i = 0; i < result.size(); i++)
+//            result[i] = nullptr;
     }
     void init();
     void match(char* text);
     void print();
 public:
-    List<char*> result;     // 当前匹配到的有效url
+//    List<char*> result;     // 当前匹配到的有效url
+    vector<char*> result;
 private:
     char buff[256];         // 当前缓冲区
     int idx;                // 当前缓冲区位置
     int match_idx;          // 匹配到的位置
-    string path;            // 当前html文件的路径
     bool isStart;           // 是否进行匹配
 
 private:

@@ -4,29 +4,53 @@
 
 #include "Matrix.h"
 
-Matrix::Matrix() {
-    UrlNum = 0;
+Matrix::Matrix(int N){
+    UrlNum = N;
+    column_idx = new List<int>[N];
+    values = new List<double>[N];
 }
+
 
 /**
- * 将源节点指向目的节点的边加入到图中
- * @param src 源节点
- * @param dst 目的节点
+ * 向矩阵Matrix[i][j] 中添加元素
+ * @param i
+ * @param j
+ * @param value
  */
-void Matrix::add(char *src, char *dst) {
-    string str_src(src);
-    string str_dst(dst);
-    if(url_idx.find(str_src) == url_idx.end()){
-        url_idx.insert({str_src, UrlNum++});
-        idx_url.append(src);
-    }
-    if(url_idx.find(str_dst) == url_idx.end()){
-        url_idx.insert({str_dst, UrlNum++});
-        idx_url.append(dst);
-    }
-    add(url_idx[str_dst], url_idx[str_src], 1.0);
+void Matrix::add(int i, int j, double value) {
+    int idx = column_idx[i].find(j);
+    // 若 i,j 已存在值 则直接相加 否则创建新值
+    if(idx == -1){
+        column_idx[i].append(j);
+        values[i].append(value);
+    }else
+        values[i][idx] += value;
 }
 
-void Matrix::add(int i, int j, double value) {
+double Matrix::get(int i, int j) {
+    int idx = column_idx[i].find(j);
+    // 查不到，为0
+    if(idx == -1)
+        return 0.0;
+    else
+        return values[i][idx];
+}
+
+void Matrix::print() {
+    printf("UrlNum:%d\n", UrlNum);
+    printf("columns idx:\n");
+    for(int i = 0; i < UrlNum; i++){
+        for(int j = 0; j < column_idx[i].size(); j++){
+            printf("%d ", column_idx[i][j]);
+        }
+        printf("\n");
+    }
+    printf("*****************************\n\nvalues idx:\n");
+    for(int i = 0; i < UrlNum; i++){
+        for(int j = 0; j < column_idx[i].size(); j++){
+            printf("%lf ", values[i][j]);
+        }
+        printf("\n");
+    }
 
 }

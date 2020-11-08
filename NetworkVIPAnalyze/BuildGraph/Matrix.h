@@ -5,19 +5,22 @@
 #ifndef BUILDGRAPH_MATRIX_H
 #define BUILDGRAPH_MATRIX_H
 #include "List.h"
-#include "unordered_map"
+#include <unordered_map>
+#include <string>
+#include <vector>
+#include "hash.h"
 using namespace std;
+
 class Matrix {
 public:
-    Matrix();
-    void add(char* src, char* dst);
+    Matrix(int N);
     void add(int i, int j, double value);
+    double get(int i, int j);
+    void print();
 
 private:
-    List<List<int>*> column_idx;
-    List<List<int>*> values;
-    unordered_map<string, int> url_idx;     // url 映射为 节点索引
-    List<char*> idx_url;                    // 节点索引 映射为 url
+    List<int> *column_idx;
+    List<double> *values;
     int UrlNum;                             // 当前节点数
 };
 

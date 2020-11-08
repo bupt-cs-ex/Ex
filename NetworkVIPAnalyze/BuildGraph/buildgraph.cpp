@@ -2,53 +2,30 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "AutoMachine.h"
 #include "Matrix.h"
-
-Matrix matrix;
-
+#include "AC_automachine.h"
+#define MODE_INSERT 1
+#define MODE_MATCH  2
+Matrix* matrix;
+AC_automachine ac;
 /**
- * 匹配文件中的url http://news.sohu.com/*.shtml
+ * 匹配文件中的url
  * @param file_name 文件名
- * @param path      当前路径
+ * @param path      模式串
  */
-int match_url(char* file_name, string path){
-    FILE *infile = fopen(file_name, "rb");
-    if(infile == NULL) {
-        printf("Failed to open test.shtml\n");
-        return -1;
+int match_url(char* file_name, char* pattern){
+    List<unsigned int>* result = ac.MatchByFile(file_name, "rb");
+    unsigned int src = ac.findKey(pattern);
+    for(int i = 0 ;i < (*result).size(); i++){
+        matrix->add(src, (*result)[i], 1.0);
     }
-    AutoMachine am(path);
-    int idx = 0;
-    char buff[2048 + 1];
-    while(!feof(infile)) {
-        int ch = fgetc(infile);     //读取一个字符
-        idx = 0;
-        //从文件中读取字符到缓冲区
-        while(ch != 0x0A && ch != -1) {
-            buff[idx] = ch;
-            ++idx;
-            if(idx == 2048)
-                break;
-            ch = fgetc(infile);
-        }
-        buff[idx] = '\0';
-        am.match(buff);
-    }
-    fclose(infile);
-//    am.print();
-    string s = path + string(file_name);
-    char* src = new char[s.size()];
-    strcpy(src, s.c_str());
-    for(int i = 0; i < am.result.size(); i++)
-        matrix.add(src, am.result[i]);
 }
 /**
- * 递归读取目录
+ * 递归读取目录,获得所有模式串
  * @param dirname 目录名
  * @param path    当前路径
  */
-void read_dir(const char* dirname, string path){
+void read_dir(const char* dirname, string path, int mode){
     DIR *dir;
     struct dirent *entry;
     struct stat statbuf;
@@ -62,19 +39,50 @@ void read_dir(const char* dirname, string path){
         if(S_ISDIR(statbuf.st_mode)){
             if((strcmp(entry->d_name, ".") == 0 ) || (strcmp(entry->d_name, "..") == 0))
                 continue;
-            printf("dir  name:%s%s\n",path.c_str(), entry->d_name);
-            read_dir(entry->d_name, path + string(entry->d_name) + "/");
+//            printf("dir  name:%s%s\n",path.c_str(), entry->d_name);
+            read_dir(entry->d_name, path + string(entry->d_name) + "/", mode);
         }else{
-            printf("file name:%s%s\n",path.c_str(), entry->d_name);
-            match_url(entry->d_name, path);
+//            printf("file name:%s%s\n",path.c_str(), entry->d_name);
+            char* file_name = new char[strlen(entry->d_name) + path.size()];
+            strcpy(file_name, path.c_str());
+            strcat(file_name, entry->d_name);
+            if(mode == MODE_INSERT){
+                ac.Insert(file_name);
+                file_name = nullptr;
+            }
+            else{
+                match_url(entry->d_name, file_name);
+                delete[] file_name;
+            }
+
         }
     }
-    chdir("..");
     closedir(dir);
+    chdir("..");
 }
 
+void testMatrix(){
 
+}
+void test_hash_map(){
+    unordered_map<char* , int, hash_func, cmp> map;
+    char* p = "hello";
+    char q[] ="hello";
+    map.insert({p, 1});
+    map.insert({"he", 12});
+    if(map.find("he") == map.end())
+        printf("no find");
+    else
+        printf("find");
+}
 int main() {
-    read_dir("../01", "http://news.sohu.com/");
+    printf("pid:%d\n", getpid());
+    read_dir("../webdir", "http://news.sohu.com/", MODE_INSERT);
+    int N = ac.Build();
+    matrix = new Matrix(N);
+    chdir("webdir");
+    read_dir("../webdir", "http://news.sohu.com/", MODE_MATCH);
+    matrix->print();
     return 0;
+
 }

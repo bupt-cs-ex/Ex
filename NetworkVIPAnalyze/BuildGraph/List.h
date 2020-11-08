@@ -18,6 +18,7 @@ public:
     int size();
     T& operator[](int n);
     int find(T value);
+    void clear();
     ~List();
 private:
     int capacity;       // 容量
@@ -77,6 +78,11 @@ int List<T>::find(T value) {
         if(array[i] == value)
             return i;
     return -1;
+}
+
+template<class T>
+void List<T>::clear() {
+    length = 0;
 }
 
 
