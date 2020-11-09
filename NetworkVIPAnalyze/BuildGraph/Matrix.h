@@ -19,8 +19,8 @@ public:
     void print();
 
 private:
-    List<int> *column_idx;
-    List<double> *values;
+    vector<vector<int>> column_idx;
+    vector<vector<double>> values;
     int UrlNum;                             // 当前节点数
 };
 

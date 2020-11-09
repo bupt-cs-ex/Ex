@@ -4,27 +4,32 @@
 
 #include "AC_automachine.h"
 
-AC_automachine::AC_automachine():urls(List<char*>(100000)) {
+AC_automachine::AC_automachine(){
     root = new Node();
 }
 /**
  * 插入模式串
  * @param pattern 模式串
  */
-void AC_automachine::Insert(char *pattern) {
-    if(pattern == nullptr)
+void AC_automachine::Insert(const string& pattern) {
+    auto it = pattern.find_last_of('.');
+    if(it == string::npos)
         return;
+    it++;
+    if(pattern.substr(it) != "html" && pattern.substr(it) != "shtml"){
+        return;
+    }
     Node* p = root;
-    for(int i = 0; i < strlen(pattern); i++) {
+    for(int i = 0; i < pattern.size(); i++) {
         int index = pattern[i] + 128;
         if(p->children[index] == nullptr) {
             p->children[index] = new Node();
         }
         p = p->children[index];
     }
-    p->outputList.append(pattern);
-    url_idx.insert({pattern, urls.size()});
-    urls.append(pattern);
+    p->outputList.push_back(urls.size());
+//    url_idx.insert({pattern, urls.size()});
+    urls.push_back(pattern);
 }
 /**
  * 构造fail指针域
@@ -63,6 +68,7 @@ int AC_automachine::Build() {
         }
     }
     printf("patterns:%d\n", urls.size());
+    idx = 0;
     return urls.size();
 }
 
@@ -86,10 +92,9 @@ Node* AC_automachine::Match(char *text, Node* start) {
             p = root;
         Node* tmp = p;
         while(tmp != root){
-            if(!tmp->outputList.isEmpty()){
+            if(!tmp->outputList.empty()){
                 for(int i = 0; i < tmp->outputList.size(); i++){
-                    int pos = findKey(tmp->outputList[i]);
-                    match_result.append(pos);
+                    match_result.push_back(tmp->outputList[i]);
                 }
             }
             tmp = tmp->fail;
@@ -102,32 +107,50 @@ Node* AC_automachine::Match(char *text, Node* start) {
  * @param key  待查找key
  * @return
  */
-int AC_automachine::findKey(char *key) {
-    return url_idx[key];
+int AC_automachine::findKey(const string& key) {
+//    return url_idx[key];
+    if(urls[idx] == key)
+        return idx;
+    else{
+        printf("idx match failed\n");
+        for(idx = 0; idx < urls.size(); idx++)
+            if(urls[idx] == key)
+                return idx;
+
+    }
+    cout << "not find key:" << key << endl;
+    return -1;
 }
 
 AC_automachine::~AC_automachine() {
-    for(int i = 0; i < urls.size(); i++)
-        delete urls[i];
+
 }
 /**
  * 通过文本文件匹配
  * @param filename 文件名，带后缀
  * @param mode     打开模式
  */
-List<unsigned int>* AC_automachine::MatchByFile(char *filename, char *mode) {
-    FILE *infile = fopen(filename, mode);
+vector<int>* AC_automachine::MatchByFile(const string& filename, char *mode) {
+    auto it = filename.find_last_of('.');
+    if(it == string::npos)
+        return nullptr;
+    it++;
+    if(filename.substr(it) != "html" && filename.substr(it) != "shtml"){
+        cout<< "ignore:" << filename.substr(it) << endl;
+        return nullptr;
+    }
+    FILE *infile = fopen(filename.c_str(), mode);
     if(infile == nullptr){
-        printf("Failed to open %s\n", filename);
+        printf("Failed to open %s\n", filename.c_str());
         return nullptr;
     }
     clear();
     char buff[2048 + 1];
     Node* start = root;
-    int idx = 0;
+
     while(!feof(infile)) {
         int ch = fgetc(infile);     //读取一个字符
-        idx = 0;
+        int idx = 0;
         //从文件中读取字符到缓冲区
         while(ch != 0x0A && ch != -1) {
             buff[idx] = ch;
@@ -140,6 +163,7 @@ List<unsigned int>* AC_automachine::MatchByFile(char *filename, char *mode) {
         start = Match(buff,start);
     }
     fclose(infile);
+    idx++;
     return &match_result;
 }
 

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "List.h"
+#include <vector>
+using namespace std;
 /**
  * AC自动机的节点结构
  */
@@ -27,7 +29,7 @@ public:
     }
     Node** children;
     Node* fail;
-    List<char*> outputList;
+    vector<int> outputList;
 };
 
 /**

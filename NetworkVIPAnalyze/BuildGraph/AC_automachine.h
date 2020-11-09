@@ -18,18 +18,20 @@ class AC_automachine {
 public:
     AC_automachine();
     ~AC_automachine();
-    void Insert(char* pattern);
+    void Insert(const string& pattern);
     int Build();
     Node* Match(char* text, Node* start=nullptr);
-    List<unsigned int>* MatchByFile(char* filename, char* mode="rb");
+    vector<int>* MatchByFile(const string& filename, char* mode="rb");
 //    void OutputToFile(char* filename);
-    int findKey(char* key);
+    int findKey(const string&);
+//    int findKey(const string& key);
     void clear();
 private:
     Node* root;                         // 根节点
-    unordered_map<char*, unsigned, hash_func, cmp> url_idx;     // map 快速查找url在urls中的位置
-    List<char*> urls;
-    List<unsigned int> match_result;            // 一个html中的匹配结果
+//    unordered_map<char*, unsigned, hash_func, cmp> url_idx;     // map 快速查找url在urls中的位置
+    vector<string> urls;
+    vector<int> match_result;            // 一个html中的匹配结果
+    int idx = 0;
 };
 
 #endif //BUILDGRAPH_AC_AUTOMACHINE_H

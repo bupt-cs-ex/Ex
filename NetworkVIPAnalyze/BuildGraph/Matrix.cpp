@@ -4,10 +4,9 @@
 
 #include "Matrix.h"
 
-Matrix::Matrix(int N){
+Matrix::Matrix(int N): column_idx(vector<vector<int>>(N)), values(vector<vector<double>>(N)){
     UrlNum = N;
-    column_idx = new List<int>[N];
-    values = new List<double>[N];
+    printf("%lu\n", column_idx.size());
 }
 
 
@@ -18,22 +17,28 @@ Matrix::Matrix(int N){
  * @param value
  */
 void Matrix::add(int i, int j, double value) {
-    int idx = column_idx[i].find(j);
+    if(i < 0 || j < 0 || i >= UrlNum || j >= UrlNum){
+        printf("i, j > UrlNum\n");
+        return;
+    }
+    auto idx = find(column_idx[i].begin(), column_idx[i].end(), j);
     // 若 i,j 已存在值 则直接相加 否则创建新值
-    if(idx == -1){
-        column_idx[i].append(j);
-        values[i].append(value);
+    if(idx == column_idx[i].end()){
+        column_idx[i].push_back(j);
+        values[i].push_back(value);
     }else
-        values[i][idx] += value;
+        values[i][idx - column_idx[i].begin()] += value;
 }
 
 double Matrix::get(int i, int j) {
-    int idx = column_idx[i].find(j);
+    if(i >= UrlNum || j >= UrlNum)
+        return 0.0;
+    auto idx = find(column_idx[i].begin(), column_idx[i].end(), j);
     // 查不到，为0
-    if(idx == -1)
+    if(idx == column_idx[i].end())
         return 0.0;
     else
-        return values[i][idx];
+        return values[i][idx - column_idx[i].begin()];
 }
 
 void Matrix::print() {
