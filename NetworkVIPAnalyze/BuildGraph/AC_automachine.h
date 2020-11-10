@@ -7,8 +7,6 @@
 
 #include <string.h>
 #include "queue.h"
-#include <unordered_map>
-#include "hash.h"
 using namespace std;
 
 /**
@@ -22,14 +20,12 @@ public:
     int Build();
     Node* Match(char* text, Node* start=nullptr);
     vector<int>* MatchByFile(const string& filename, char* mode="rb");
-//    void OutputToFile(char* filename);
     int findKey(const string&);
-//    int findKey(const string& key);
     void clear();
+public:
+    vector<string> urls;                 // 保存url
 private:
-    Node* root;                         // 根节点
-//    unordered_map<char*, unsigned, hash_func, cmp> url_idx;     // map 快速查找url在urls中的位置
-    vector<string> urls;
+    Node* root;                          // 根节点
     vector<int> match_result;            // 一个html中的匹配结果
     int idx = 0;
 };

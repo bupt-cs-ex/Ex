@@ -28,7 +28,6 @@ void AC_automachine::Insert(const string& pattern) {
         p = p->children[index];
     }
     p->outputList.push_back(urls.size());
-//    url_idx.insert({pattern, urls.size()});
     urls.push_back(pattern);
 }
 /**
