@@ -10,6 +10,7 @@ Matrix* matrix = nullptr;
 AC_automachine* ac = nullptr;
 string graph_file = "graph.txt";
 string urls_file = "urls.txt";
+double alpha = 0.85;
 /**
  * 匹配文件中的url
  * @param file_name 文件名
@@ -21,7 +22,7 @@ void match_url(char* file_name, const string& pattern){
         int src = ac->findKey(pattern);
         int length = (*result).size();
         for(int i = 0 ;i < length; i++){
-            matrix->add(src, (*result)[i], 1.0 / length);
+            matrix->add((*result)[i], src, 1.0 / length);
         }
     }
 }
@@ -61,37 +62,53 @@ void read_dir(const char* dirname, const string& path, int mode){
     closedir(dir);
     chdir("..");
 }
-void test(){
-    string Line = "12\t14\t0.056";
-    int p1, p2;
-    p1 = Line.find_first_of('\t');
-    p2 = Line.find_last_of('\t');
-    int i = stoi(Line.substr(0, p1));
-    int j = stoi(Line.substr(p1 + 1, p2));
-    double value = stod(Line.substr(p2));
-    cout<<i<<endl;
-    cout<<j<<endl;
-    cout<<value<<endl;
+void generate_graph(Matrix*& mat, const string& mat_txt, const string& url_txt){
+    printf("pid:%d\n", getpid());
+    ac = new AC_automachine();
+    read_dir("../01", "http://news.sohu.com/", MODE_INSERT);
+    int N = ac->Build();
+    mat = new Matrix(N);
+    chdir("01");
+    read_dir("../01", "http://news.sohu.com/", MODE_MATCH);
+    chdir("01");
+//    mat->print();
+    save_urls(url_txt, ac->urls);
+    mat->save(mat_txt);
+
+    delete ac;
+    ac = nullptr;
 }
 vector<string> LoadData(Matrix*& mat, const string& mat_txt, const string& url_txt){
-    chdir("..");
-    mat = load_matrix(mat_txt);
+    if(mat == nullptr){
+        mat = load_matrix(mat_txt);
+    }
     return load_urls(url_txt);
 }
 int main() {
-//    printf("pid:%d\n", getpid());
-//    ac = new AC_automachine();
-//    read_dir("../01", "http://news.sohu.com/", MODE_INSERT);
-//    int N = ac->Build();
-//    matrix = new Matrix(N);
-//    chdir("01");
-//    read_dir("../01", "http://news.sohu.com/", MODE_MATCH);
-//    matrix->print();
-//    save_urls("urls.txt", ac->urls);
-//    matrix->save("graph.txt");
+    generate_graph(matrix, graph_file, urls_file);
     vector<string> urls = LoadData(matrix, graph_file, urls_file);
-    cout << urls.size() << urls[1] << endl;
-    matrix->print();
+    (*matrix)*alpha;
+    matrix->set_base((1.0 - alpha) / matrix->UrlNum);
+    double e = 1e-8;
+    vector<double> p(matrix->UrlNum, 1.0 / matrix->UrlNum);
+    int count = 1;
+    while(true){
+        cout << "iter: " << count << endl;
+        vector<double> p1 = (*matrix) * p;
+        if(get_mod(p1, p) < e)
+            break;
+        p = p1;
+        count++;
+    }
+    cout << "finish" <<endl;
+    vector<pair<double, int>> url_idx;
+    for(int i = 0; i < p.size(); i++){
+        url_idx.emplace_back(p[i], i);
+    }
+    sort(url_idx.begin(), url_idx.end(), [](pair<double, int>& o1, pair<double, int>& o2){ return o2.first < o1.first;});
+    for(int i = 0 ; i < 5; i++){
+        cout << i << ": " << urls[url_idx[i].second] << " PP:" << url_idx[i].first << endl;
+    }
     return 0;
 
 }

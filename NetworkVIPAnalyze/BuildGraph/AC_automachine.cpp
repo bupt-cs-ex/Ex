@@ -122,7 +122,7 @@ int AC_automachine::findKey(const string& key) {
 }
 
 AC_automachine::~AC_automachine() {
-
+    delete root;
 }
 /**
  * 通过文本文件匹配

@@ -7,6 +7,7 @@
 
 Matrix::Matrix(int N): column_idx(vector<vector<int>>(N)), values(vector<vector<double>>(N)){
     UrlNum = N;
+    base = 0;
 }
 
 
@@ -34,11 +35,11 @@ double Matrix::get(int i, int j)const {
     if(i < 0 || j < 0 || i >= UrlNum || j >= UrlNum)
         return 0.0;
     auto idx = find(column_idx[i].begin(), column_idx[i].end(), j);
-    // 查不到，为0
+    // 查不到，为base
     if(idx == column_idx[i].end())
-        return 0.0;
+        return base;
     else
-        return values[i][idx - column_idx[i].begin()];
+        return values[i][idx - column_idx[i].begin()] + base;
 }
 
 void Matrix::print() {
@@ -85,10 +86,21 @@ void Matrix::set(int i, int j, double value) {
     }
 }
 
-double Matrix::det() const {
-    return 0;
+/*
+ * 矩阵与常数相乘
+ */
+Matrix &Matrix::operator*(double alpha) {
+    for(int i = 0; i < UrlNum; i++){
+        for(int j = 0; j < values[i].size(); j++){
+            values[i][j] *= alpha;
+        }
+    }
+    return *this;
 }
 
+void Matrix::set_base(double b) {
+    base = b;
+}
 
 Matrix operator*(const Matrix &A, const Matrix &B) {
     assert(A.UrlNum == B.UrlNum);
@@ -126,27 +138,6 @@ Matrix* load_matrix(const string &file_name) {
     return M;
 }
 
-Matrix operator+(const Matrix &A, const Matrix &B) {
-    int N = A.UrlNum;
-    Matrix M(N);
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            M.set(i, j, A.get(i, j) + B.get(i, j));
-        }
-    }
-    return M;
-}
-
-Matrix operator-(const Matrix &A, const Matrix &B) {
-    int N = A.UrlNum;
-    Matrix M(N);
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            M.set(i, j, A.get(i, j) - B.get(i, j));
-        }
-    }
-    return M;
-}
 /**
  * 保存urls信息
  * 格式：
@@ -164,7 +155,7 @@ void save_urls(const string &file_name, const vector<string>& urls) {
 
 vector<string> load_urls(const string &file_name) {
     ifstream in = ifstream(file_name, ifstream::in);
-    int N;
+    int N = 0;
     in >> N;
     vector<string> urls(N);
     string Line;
@@ -176,3 +167,33 @@ vector<string> load_urls(const string &file_name) {
     in.close();
     return urls;
 }
+/*
+ * 矩阵与列向量相乘
+ * @return 列向量
+ */
+vector<double> operator*(const Matrix &A, const vector<double> &vec) {
+    vector<double> result(vec.size());
+    for(int i = 0; i < A.UrlNum; i++){
+        double val = 0.0;
+        for(int j = 0; j < A.UrlNum; j++){
+            val += A.get(i, j) * vec[j];
+        }
+        result[i] = val;
+    }
+    return result;
+}
+/**
+ * 两个列向量做差后取模的平方
+ * @param v1
+ * @param v2
+ * @return
+ */
+double get_mod(const vector<double> &v1, const vector<double> &v2) {
+    double sum = 0;
+    for(int i =0; i < v1.size(); i++){
+        double x = v1[i] - v2[i];
+        sum += x * x;
+    }
+    return sum;
+}
+
