@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Matrix.h"
+#include <numeric>
 
 Matrix::Matrix(int N): column_idx(vector<vector<int>>(N)), values(vector<vector<double>>(N)){
     UrlNum = N;
@@ -101,22 +102,26 @@ Matrix &Matrix::operator*(double alpha) {
 void Matrix::set_base(double b) {
     base = b;
 }
-
-Matrix operator*(const Matrix &A, const Matrix &B) {
-    assert(A.UrlNum == B.UrlNum);
-    int N = A.UrlNum;
-    Matrix M(N);
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            double val = 0.0;
-            for(int k = 0; k < N; k++){
-                val += A.get(i, k) * B.get(k, j);
-            }
-            M.set(i, j, val);
+/**
+ * 优化：矩阵与列向量相乘
+ * @param p 列向量
+ * @return
+ */
+vector<double> Matrix::operator*(const vector<double> p) const {
+    vector<double> p1(UrlNum);
+    double sum = accumulate(p.begin(), p.end(), 0.0);
+    sum *= base;
+    for(int i = 0; i < UrlNum; i++){
+        double val = 0;
+        const vector<int>& col = vector<int>(column_idx[i]);
+        for(int j = 0; j < col.size(); j++){
+            val += values[i][j] * p[col[j]];
         }
+        p1[i] = val + base;
     }
-    return M;
+    return p1;
 }
+
 /**
  * 从格式化txt中加载矩阵
  * @param file_name
@@ -125,6 +130,7 @@ Matrix operator*(const Matrix &A, const Matrix &B) {
 Matrix* load_matrix(const string &file_name) {
     ifstream in = ifstream(file_name, ifstream::in);
     int N;
+    cout << "start read " << file_name << endl;
     in >> N;
     auto* M = new Matrix(N);
     int i, j;
@@ -156,6 +162,7 @@ void save_urls(const string &file_name, const vector<string>& urls) {
 vector<string> load_urls(const string &file_name) {
     ifstream in = ifstream(file_name, ifstream::in);
     int N = 0;
+    cout << "start read file" << file_name << endl;
     in >> N;
     vector<string> urls(N);
     string Line;
@@ -167,21 +174,21 @@ vector<string> load_urls(const string &file_name) {
     in.close();
     return urls;
 }
-/*
- * 矩阵与列向量相乘
- * @return 列向量
- */
-vector<double> operator*(const Matrix &A, const vector<double> &vec) {
-    vector<double> result(vec.size());
-    for(int i = 0; i < A.UrlNum; i++){
-        double val = 0.0;
-        for(int j = 0; j < A.UrlNum; j++){
-            val += A.get(i, j) * vec[j];
-        }
-        result[i] = val;
-    }
-    return result;
-}
+///*
+// * 矩阵与列向量相乘
+// * @return 列向量
+// */
+//vector<double> operator*(const Matrix &A, const vector<double> &vec) {
+//    vector<double> result(vec.size());
+//    for(int i = 0; i < A.UrlNum; i++){
+//        double val = 0.0;
+//        for(int j = 0; j < A.UrlNum; j++){
+//            val += A.get(i, j) * vec[j];
+//        }
+//        result[i] = val;
+//    }
+//    return result;
+//}
 /**
  * 两个列向量做差后取模的平方
  * @param v1

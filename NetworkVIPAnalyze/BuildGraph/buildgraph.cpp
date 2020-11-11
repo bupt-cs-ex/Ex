@@ -8,8 +8,8 @@
 #define MODE_MATCH  2
 Matrix* matrix = nullptr;
 AC_automachine* ac = nullptr;
-string graph_file = "graph.txt";
-string urls_file = "urls.txt";
+string graph_file = "../graph.txt";
+string urls_file = "../urls.txt";
 double alpha = 0.85;
 /**
  * 匹配文件中的url
@@ -22,6 +22,9 @@ void match_url(char* file_name, const string& pattern){
         int src = ac->findKey(pattern);
         int length = (*result).size();
         for(int i = 0 ;i < length; i++){
+            // 消除自引用导致的排名上升问题
+//            if(src == (*result)[i])
+//                continue;
             matrix->add((*result)[i], src, 1.0 / length);
         }
     }
@@ -63,14 +66,13 @@ void read_dir(const char* dirname, const string& path, int mode){
     chdir("..");
 }
 void generate_graph(Matrix*& mat, const string& mat_txt, const string& url_txt){
-    printf("pid:%d\n", getpid());
     ac = new AC_automachine();
-    read_dir("../01", "http://news.sohu.com/", MODE_INSERT);
+    read_dir("../webdir", "http://news.sohu.com/", MODE_INSERT);
     int N = ac->Build();
     mat = new Matrix(N);
-    chdir("01");
-    read_dir("../01", "http://news.sohu.com/", MODE_MATCH);
-    chdir("01");
+    chdir("webdir");
+    read_dir("../webdir", "http://news.sohu.com/", MODE_MATCH);
+    chdir("webdir");
 //    mat->print();
     save_urls(url_txt, ac->urls);
     mat->save(mat_txt);
@@ -85,7 +87,8 @@ vector<string> LoadData(Matrix*& mat, const string& mat_txt, const string& url_t
     return load_urls(url_txt);
 }
 int main() {
-    generate_graph(matrix, graph_file, urls_file);
+    printf("pid:%d\n", getpid());
+//    generate_graph(matrix, graph_file, urls_file);
     vector<string> urls = LoadData(matrix, graph_file, urls_file);
     (*matrix)*alpha;
     matrix->set_base((1.0 - alpha) / matrix->UrlNum);
@@ -106,8 +109,8 @@ int main() {
         url_idx.emplace_back(p[i], i);
     }
     sort(url_idx.begin(), url_idx.end(), [](pair<double, int>& o1, pair<double, int>& o2){ return o2.first < o1.first;});
-    for(int i = 0 ; i < 5; i++){
-        cout << i << ": " << urls[url_idx[i].second] << " PP:" << url_idx[i].first << endl;
+    for(int i = 0 ; i < 20; i++){
+        cout << i << ": " << urls[url_idx[i].second] << " PR:" << url_idx[i].first << endl;
     }
     return 0;
 

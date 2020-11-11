@@ -20,6 +20,7 @@ public:
     void print();
     void save(const string& file_name);
     Matrix& operator*(double alpha);
+    vector<double> operator*(const vector<double> p) const;
     void set_base(double b);
 
 public:
@@ -29,8 +30,7 @@ public:
     double base;
 };
 
-Matrix operator*(const Matrix& A, const Matrix& B);
-vector<double> operator*(const Matrix& A, const vector<double>& vec);
+//vector<double> operator*(const Matrix& A, const vector<double>& vec);
 double get_mod(const vector<double>& v1, const vector<double>& v2);
 Matrix* load_matrix(const string& file_name);
 void save_urls(const string& file_name, const vector<string>& urls);
