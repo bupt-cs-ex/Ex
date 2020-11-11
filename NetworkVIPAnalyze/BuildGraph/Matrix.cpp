@@ -80,10 +80,16 @@ void Matrix::save(const string &file_name) {
     cout << "save matrix in " << file_name << " success" << endl;
     out.close();
 }
-
+/**
+ * 用于直接设置值
+ * @param i
+ * @param j
+ * @param value
+ */
 void Matrix::set(int i, int j, double value) {
     if(value != 0.0){
-        add(i, j, value);
+        column_idx[i].push_back(j);
+        values[i].push_back(value);
     }
 }
 
@@ -137,7 +143,7 @@ Matrix* load_matrix(const string &file_name) {
     double value;
     string Line;
     while(in >> i >> j >> value){
-        M->add(i, j, value);
+        M->set(i, j, value);
     }
     in.close();
     cout << "load matrix from " << file_name << " success" << endl;

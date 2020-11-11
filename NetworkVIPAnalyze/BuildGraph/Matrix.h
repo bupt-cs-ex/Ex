@@ -15,14 +15,13 @@ class Matrix {
 public:
     Matrix(int N);
     void add(int i, int j, double value);
-    void set(int i, int j, double value);
     double get(int i, int j)const;
     void print();
     void save(const string& file_name);
     Matrix& operator*(double alpha);
     vector<double> operator*(const vector<double> p) const;
     void set_base(double b);
-
+    void set(int i, int j, double value);
 public:
     vector<vector<int>> column_idx;
     vector<vector<double>> values;
