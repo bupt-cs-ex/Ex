@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <ctime>
 int main() {
-    int m = 256;
+    int m = 128;
     AC_automachine ac(m);
     List<char*> keyList;
     printf("pid:%d\n",getpid());
