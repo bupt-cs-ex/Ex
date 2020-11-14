@@ -8,8 +8,8 @@
 #define MODE_MATCH  2
 Matrix* matrix = nullptr;
 AC_automachine* ac = nullptr;
-string graph_file = "../graph.txt";
-string urls_file = "../urls.txt";
+string graph_file = "graph.txt";
+string urls_file = "urls.txt";
 double alpha = 0.85;
 /**
  * 匹配文件中的url
@@ -67,13 +67,11 @@ void read_dir(const char* dirname, const string& path, int mode){
 }
 void generate_graph(Matrix*& mat, const string& mat_txt, const string& url_txt){
     ac = new AC_automachine();
-    read_dir("../webdir", "http://news.sohu.com/", MODE_INSERT);
+    chdir("..");
+    read_dir("webdir", "http://news.sohu.com/", MODE_INSERT);
     int N = ac->Build();
     mat = new Matrix(N);
-    chdir("webdir");
-    read_dir("../webdir", "http://news.sohu.com/", MODE_MATCH);
-    chdir("webdir");
-//    mat->print();
+    read_dir("webdir", "http://news.sohu.com/", MODE_MATCH);
     save_urls(url_txt, ac->urls);
     mat->save(mat_txt);
 
@@ -88,7 +86,8 @@ vector<string> LoadData(Matrix*& mat, const string& mat_txt, const string& url_t
 }
 int main() {
     printf("pid:%d\n", getpid());
-//    generate_graph(matrix, graph_file, urls_file);
+    generate_graph(matrix, graph_file, urls_file);
+//    return 0;
     vector<string> urls = LoadData(matrix, graph_file, urls_file);
     (*matrix)*alpha;
     matrix->set_base((1.0 - alpha) / matrix->UrlNum);

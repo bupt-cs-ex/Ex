@@ -23,24 +23,26 @@ void Matrix::add(int i, int j, double value) {
         printf("i, j > UrlNum\n");
         return;
     }
-    auto idx = find(column_idx[i].begin(), column_idx[i].end(), j);
+    int idx = _find(i, j);
     // 若 i,j 已存在值 则直接相加 否则创建新值
-    if(idx == column_idx[i].end()){
+    if(idx == -1){
         column_idx[i].push_back(j);
         values[i].push_back(value);
     }else
-        values[i][idx - column_idx[i].begin()] += value;
+        values[i][idx] += value;
 }
 
 double Matrix::get(int i, int j)const {
-    if(i < 0 || j < 0 || i >= UrlNum || j >= UrlNum)
+    if(i < 0 || j < 0 || i >= UrlNum || j >= UrlNum){
+        printf("i, j > UrlNum\n");
         return 0.0;
-    auto idx = find(column_idx[i].begin(), column_idx[i].end(), j);
+    }
+    int idx = _find(i, j);
     // 查不到，为base
-    if(idx == column_idx[i].end())
+    if(idx == -1)
         return base;
     else
-        return values[i][idx - column_idx[i].begin()] + base;
+        return values[i][idx] + base;
 }
 
 void Matrix::print() {
@@ -113,7 +115,7 @@ void Matrix::set_base(double b) {
  * @param p 列向量
  * @return
  */
-vector<double> Matrix::operator*(const vector<double> p) const {
+vector<double> Matrix::operator*(const vector<double>& p) const {
     vector<double> p1(UrlNum);
     double sum = accumulate(p.begin(), p.end(), 0.0);
     sum *= base;
@@ -126,6 +128,18 @@ vector<double> Matrix::operator*(const vector<double> p) const {
         p1[i] = val + base;
     }
     return p1;
+}
+/**
+ * 查看一下第orw行有没有列号为col
+ * @param row
+ * @param col
+ * @return idx or -1
+ */
+int Matrix::_find(int row, int col)const {
+    for(int i = 0 ; i < column_idx[row].size(); i++)
+        if(column_idx[row][i] == col)
+            return i;
+    return -1;
 }
 
 /**
@@ -180,21 +194,7 @@ vector<string> load_urls(const string &file_name) {
     in.close();
     return urls;
 }
-///*
-// * 矩阵与列向量相乘
-// * @return 列向量
-// */
-//vector<double> operator*(const Matrix &A, const vector<double> &vec) {
-//    vector<double> result(vec.size());
-//    for(int i = 0; i < A.UrlNum; i++){
-//        double val = 0.0;
-//        for(int j = 0; j < A.UrlNum; j++){
-//            val += A.get(i, j) * vec[j];
-//        }
-//        result[i] = val;
-//    }
-//    return result;
-//}
+
 /**
  * 两个列向量做差后取模的平方
  * @param v1
