@@ -1,0 +1,4 @@
+1: http://news.sohu.com/20061113/n246356115.shtml , betweeness centrality: 3
+2: http://news.sohu.com/20061113/n246352456.shtml , betweeness centrality: 0.5
+3: http://news.sohu.com/20061113/n246351834.shtml , betweeness centrality: 0.5
+4: http://news.sohu.com/20061113/n246351354.shtml , betweeness centrality: 0
